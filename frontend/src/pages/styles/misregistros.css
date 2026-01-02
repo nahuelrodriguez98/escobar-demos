@@ -1,0 +1,127 @@
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --text-color: #333;
+  --bg-light: #f8f9fa;
+  --card-bg: #fff;
+  --border-color: #e9ecef;
+  --header-bg: #e2e6ea;
+}
+
+.registros-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.registros-container h3 {
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 17, 52, 0.2);
+}
+
+.table-responsive-wrapper {
+    overflow-x: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0;
+    background-color: var(--card-bg);
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table thead tr {
+    background-color: var(--header-bg);
+    color: var(--text-color);
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.table tbody tr:hover {
+    background-color: var(--bg-light);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table td:nth-child(5),
+.table td:nth-child(6) {
+    font-weight: 500;
+    color: #17a2b8;
+}
+
+@media screen and (max-width: 768px) {
+
+    .registros-container {
+        padding: 10px;
+    }
+    
+    .registros-container h3 {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+    }
+
+    .table, .table thead, .table tbody, .table th, .table td, .table tr {
+        display: block;
+    }
+    
+    .table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    .table tr {
+        border: 1px solid var(--border-color);
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        background-color: var(--card-bg);
+        padding: 10px; 
+    }
+
+    .table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+        font-size: 0.95rem;
+        min-height: 40px; 
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+    
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+}

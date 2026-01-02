@@ -1,0 +1,61 @@
+.empleado-dashboard {
+  padding: 30px;
+  
+}
+
+.empleado-titulo {
+  display: flex;
+  font-size: 28px;
+  margin-bottom: 5%;
+  font-weight: bold;
+  justify-content: center;
+ 
+}
+
+.empleado-titulo h2{
+  margin-top: 4%;
+  color:#002d70;
+}
+
+.empleado-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-top: 15px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+.tab {
+  padding: 10px 15px;
+  background: #ddd;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+  width: 32%;
+}
+
+.empleado-logo {
+  max-width: 220px;
+  height: auto;
+  display: flex;
+}
+
+.tab:hover {
+  background: #ccc;
+}
+
+.tab.active {
+  background: #007bff;
+  color: white;
+  
+}

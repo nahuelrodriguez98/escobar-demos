@@ -1,0 +1,128 @@
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f0f2f5;
+  font-family: Arial, sans-serif;
+}
+
+.login-card {
+  background: #ffffff;
+  padding: 35px 40px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+}
+
+.login-input {
+  width: 100%;
+  padding-left: 5px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.login-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.35);
+}
+
+.input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.icon-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.55;
+  user-select: none;
+  transition: opacity 0.2s ease;
+}
+
+.icon-eye:hover {
+  opacity: 1;
+}
+
+.login-button {
+  margin-top: 10px;
+  padding: 12px;
+  background: #0084ff;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.login-microsoft {
+  text-decoration: none;
+}
+
+.login-microsoft button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #5e5e5e;
+  border: 1px solid #8c8c8c;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 220px;
+}
+
+.login-microsoft button:hover {
+  background-color: #f2f2f2;
+  border-color: #00a4ef;
+}
+
+.login-microsoft button::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgb(115, 115, 115);
+  border-radius: 2px;
+  margin-right: 12px;
+  background: conic-gradient(
+    #f25022 0deg 90deg, 
+    #7fbb00 90deg 180deg, 
+    #00a4ef 180deg 270deg, 
+    #ffb900 270deg 360deg
+  );
+}
+
+.login-button:hover {
+  background: #006fe0;
+}
+
+.login-button:active {
+  transform: scale(0.97);
+}

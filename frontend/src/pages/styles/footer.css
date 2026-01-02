@@ -1,0 +1,84 @@
+.admin-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+
+  min-height: 36px; /* mejor que height fija */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 20px;
+  background: #1e293b;
+  color: #e2e8f0;
+  border-top: 1px solid #334155;
+}
+
+/* Izquierda */
+.footer-left h4 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* Derecha */
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-right span {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+/* Dot */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #4ade80;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .admin-footer {
+    padding: 6px 12px;
+    min-height: 44px;
+  }
+
+  .footer-left h4 {
+    font-size: 0.75rem;
+  }
+
+  .footer-right span {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-footer {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
+  }
+
+  .footer-left h4 {
+    font-size: 0.7rem;
+  }
+
+  .footer-right span {
+    font-size: 0.7rem;
+  }
+}
