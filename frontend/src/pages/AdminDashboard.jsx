@@ -1,7 +1,7 @@
 ﻿import Sidebar from "../components/sidebar";
 import Navbar from "../components/Navbar";
 import FooterAdmin from "../components/Navbar";
-import "../pages/styles/AdminDashboard.css";
+import "../pages/styles/admindashboard.css";
 
 export default function AdminDashboard() {
   return (
