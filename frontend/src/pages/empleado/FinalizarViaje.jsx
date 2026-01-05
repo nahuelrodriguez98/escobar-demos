@@ -84,7 +84,7 @@ export default function FinalizarViaje() {
   };
 
   return (
-    <div>
+    <div className="finalizar-viaje">
       <h3>Finalizar viaje</h3>
 
       <div className="form-row">
