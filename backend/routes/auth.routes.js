@@ -3,33 +3,38 @@ const router = express.Router();
 const passport = require("passport");
 const db = require("../config/db");
 const jwt = require("jsonwebtoken");
-
+const { initMicrosoftStrategy } = require("../auth/microsoft");
 // =======================
 // Login Microsoft
 // =======================
-router.get(
-  "/microsoft",
-  passport.authenticate("azuread-openidconnect", {
-    failureRedirect: "/login",
-  })
-);
+router.get("/microsoft", (req, res, next) => {
+  initMicrosoftStrategy(); // Ahora sí funcionará y leerá las env vars en tiempo de ejecución
+  
+  // Verificación de seguridad por si la estrategia falló al cargar
+  try {
+      passport.authenticate("azuread-openidconnect")(req, res, next);
+  } catch (e) {
+      console.error("Error al intentar autenticar con Microsoft", e);
+      res.status(500).send("Error de configuración en el servidor (Microsoft Auth no disponible).");
+  }
+});
 
 // =======================
 // Callback Microsoft
 // =======================
 router.get(
   "/callback",
-  passport.authenticate("azuread-openidconnect", {
-    failureRedirect: "/login",
-  }),
+  (req, res, next) => {
+    initMicrosoftStrategy();
+    passport.authenticate("azuread-openidconnect", {
+      failureRedirect: "/login"
+    })(req, res, next);
+  },
   async (req, res) => {
     const email = req.user._json.preferred_username;
     const nombre = req.user.displayName;
     const azure_id = req.user.oid;
 
-    console.log("LOGIN MICROSOFT:", { email, nombre, azure_id });
-
-    // Buscar empleado existente
     const existing = await db.query(
       `
       SELECT id, rol, azure_id
@@ -44,20 +49,16 @@ router.get(
     let rol;
 
     if (existing.rows.length > 0) {
-      const empleado = existing.rows[0];
-      empleadoId = empleado.id;
-      rol = empleado.rol;
+      empleadoId = existing.rows[0].id;
+      rol = existing.rows[0].rol;
 
-      if (!empleado.azure_id) {
+      if (!existing.rows[0].azure_id) {
         await db.query(
           `UPDATE empleados SET azure_id = $1 WHERE id = $2`,
           [azure_id, empleadoId]
         );
       }
     } else {
-      const defaultRol = "empleado";
-      const defaultConcesionariaId = 23;
-
       const insert = await db.query(
         `
         INSERT INTO empleados
@@ -66,37 +67,32 @@ router.get(
           ($1, $2, $3, $4, $5)
         RETURNING id
         `,
-        [nombre, email, azure_id, defaultRol, defaultConcesionariaId]
+        [nombre, email, azure_id, "empleado", 23]
       );
 
       empleadoId = insert.rows[0].id;
-      rol = defaultRol;
+      rol = "empleado";
     }
 
-    // Guardar sesión
-    req.session.user = {
+    const payload = {
       id: empleadoId,
       nombre,
       email,
       azure_id,
-      rol,
+      rol
     };
 
-    console.log("SESION GUARDADA:", req.session.user);
-
-    // Generar token
     const token = jwt.sign(
-      req.session.user,
-      process.env.JWT_SECRET || "mi_token_secreto_admin_escobar",
+      payload,
+      process.env.JWT_SECRET,
       { expiresIn: "3h" }
     );
 
-    return res.redirect(
+    res.redirect(
       `${process.env.FRONTEND_URL}/auth/success?token=${token}`
     );
   }
 );
-
 // =======================
 // Login clásico
 // =======================

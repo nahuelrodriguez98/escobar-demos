@@ -1,8 +1,7 @@
 ﻿require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
-const passport = require("passport"); 
-require("./auth/microsoft");         
+const passport = require("passport");      
 const cors = require("cors");
 const authRoutes = require("./routes/auth.routes");
 const empleadosRoutes = require("./routes/empleados");
@@ -14,7 +13,6 @@ const app = express();
 
 app.use(cors({
   origin: function (origin, callback) {
-    // permitir requests sin origin (Postman, server-to-server)
     if (!origin) return callback(null, true);
 
     const allowedOrigins = [
