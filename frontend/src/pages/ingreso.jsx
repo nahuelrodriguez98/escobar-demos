@@ -25,7 +25,7 @@ export default function Ingreso() {
       localStorage.setItem("token", token);
 
       try {
-        const res = await axios.get("https://escobardemos.vercel.app/auth/userinfo", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
