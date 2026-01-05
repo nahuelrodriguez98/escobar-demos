@@ -3,6 +3,7 @@
   border-radius: 12px;
   padding: 24px;
   max-width: 600px;
+  margin: 0 auto;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 .finalizar-viaje h3 {
