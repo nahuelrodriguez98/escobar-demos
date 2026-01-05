@@ -1,3 +1,7 @@
+.finalizar-viaje-content{
+  display: flex;
+  justify-content: center;
+}
 .finalizar-viaje {
   background: #ffffff;
   border-radius: 12px;

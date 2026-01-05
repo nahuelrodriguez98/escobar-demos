@@ -84,6 +84,8 @@ export default function FinalizarViaje() {
   };
 
   return (
+    <div className="finalizar-viaje-content">
+    
     <div className="finalizar-viaje">
       <h3>Finalizar viaje</h3>
 
@@ -137,6 +139,7 @@ export default function FinalizarViaje() {
       <button className="btn btn-primary" onClick={finalizar}>
         Finalizar viaje
       </button>
+    </div>
     </div>
   );
 }
