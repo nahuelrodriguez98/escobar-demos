@@ -13,9 +13,25 @@ const registrosRoutes = require("./routes/registros");
 const app = express();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true
+  origin: function (origin, callback) {
+    // permitir requests sin origin (Postman, server-to-server)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      process.env.FRONTEND_URL
+    ];
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+app.options("*", cors());
 
 
 app.use(express.urlencoded({ extended: true }));
