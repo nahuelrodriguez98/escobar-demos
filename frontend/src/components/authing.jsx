@@ -8,7 +8,7 @@ export default function Authing() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/auth/userinfo", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
           withCredentials: true
         });
 

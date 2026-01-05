@@ -6,6 +6,7 @@ import "../styles/finalizarviaje.css";
 export default function FinalizarViaje() {
   const empleado = JSON.parse(localStorage.getItem("empleado"));
   const [viajes, setViajes] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL;
   const [form, setForm] = useState({
     registroId: "",
     kilometrajeRetorno: "",
@@ -15,7 +16,7 @@ export default function FinalizarViaje() {
   const load = async () => {
     try {
       const r = await axios.get(
-        `http://localhost:4000/registros/abiertos/${empleado.id}`
+        `${API_URL}/registros/abiertos/${empleado.id}`
       );
 
       setViajes(Array.isArray(r.data) ? r.data : [r.data]);
@@ -42,7 +43,7 @@ export default function FinalizarViaje() {
 
     try {
       await axios.put(
-        `http://localhost:4000/registros/finalizar/${form.registroId}`,
+        `${API_URL}/registros/finalizar/${form.registroId}`,
         form
       );
 

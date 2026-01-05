@@ -9,7 +9,7 @@ export default function MisRegistros() {
   const load = async () => {
     try {
       const r = await axios.get(
-        `http://localhost:4000/registros/por-empleado/${empleado.id}`
+        `${import.meta.env.VITE_API_URL}/registros/por-empleado/${empleado.id}`
       );
       setRegistros(r.data);
     } catch (error) {

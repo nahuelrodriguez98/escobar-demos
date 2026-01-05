@@ -12,7 +12,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:4000/auth/login", {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
         email,
         contrasenia,
       });
@@ -64,7 +64,7 @@ export default function Login() {
           Ingresar
         </button>
 
-        <a className="login-microsoft" href="http://localhost:4000/auth/microsoft">
+        <a className="login-microsoft" href={`${import.meta.env.VITE_API_URL}/auth/microsoft`}>
           <button>Ingresar con Microsoft</button>
         </a>
       </div>

@@ -11,25 +11,25 @@ export default function Empleados() {
  const [filterBy, setFilterBy] = useState("nombre"); 
 
  const load = async () => {
-  const r = await axios.get('http://localhost:4000/empleados');
+  const r = await axios.get(`${import.meta.env.VITE_API_URL}/empleados`);
   setList(r.data);
  };
  const loadConces = async () => {
-  const r = await axios.get('http://localhost:4000/concesionarias');
+  const r = await axios.get(`${import.meta.env.VITE_API_URL}/concesionarias`);
   setConces(r.data);
  };
 
  useEffect(()=>{ load(); loadConces(); }, []);
 
  const crear = async () => {
-  await axios.post('http://localhost:4000/empleados', form);
+  await axios.post(`${import.meta.env.VITE_API_URL}/empleados`, form);
   setForm({ nombre:'', email:'', concesionaria_id:'', rol:'empleado', contrasenia:'', azure_id:'' });
   load();
  };
 
  const borrar = async (id) => {
   if(!confirm('Borrar empleado?')) return;
-  await axios.delete(`http://localhost:4000/empleados/${id}`);
+  await axios.delete(`${import.meta.env.VITE_API_URL}/empleados/${id}`);
   load();
  };
 

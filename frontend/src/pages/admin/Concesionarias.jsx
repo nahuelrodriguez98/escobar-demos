@@ -9,14 +9,14 @@ export default function Concesionarias() {
   const [form, setForm] = useState({ nombre:'', direccion:'' });
 
   const load = async () => {
-    const res = await axios.get('http://localhost:4000/concesionarias');
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/concesionarias`);
     setList(res.data);
   };
 
   useEffect(()=>{ load(); }, []);
 
   const crear = async () => {
-    await axios.post('http://localhost:4000/concesionarias', form);
+    await axios.post(`${import.meta.env.VITE_API_URL}/concesionarias`, form);
     setForm({ nombre:'', direccion:'' });
     load();
   };
@@ -35,7 +35,7 @@ export default function Concesionarias() {
 
     if (result.isConfirmed) {
         try {
-            await axios.delete(`http://localhost:4000/concesionarias/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/concesionarias/${id}`);
             Swal.fire(
                 '¡Eliminada!',
                 'La concesionaria ha sido borrada con éxito.',

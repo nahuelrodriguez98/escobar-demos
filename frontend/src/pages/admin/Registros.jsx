@@ -22,7 +22,7 @@ export default function Registros() {
 
   const load = async () => {
     try {
-      const r = await axios.get("http://localhost:4000/registros");
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`);
       setList(r.data);
     } catch (error) {
       console.error("Error al cargar registros:", error);
@@ -31,7 +31,7 @@ export default function Registros() {
 
   const loadEmpl = async () => {
     try {
-      const r = await axios.get("http://localhost:4000/empleados");
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/empleados`);
       setEmpleados(r.data);
     } catch (error) {
       console.error("Error al cargar empleados:", error);
@@ -40,7 +40,7 @@ export default function Registros() {
 
   const loadVeh = async () => {
     try {
-      const r = await axios.get("http://localhost:4000/vehiculos");
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`);
       setVehiculos(r.data);
     } catch (error) {
       console.error("Error al cargar vehículos:", error);
@@ -49,7 +49,7 @@ export default function Registros() {
 
   const crear = async () => {
     try {
-      await axios.post("http://localhost:4000/registros", form);
+      await axios.post(`${import.meta.env.VITE_API_URL}/registros`, form);
       setForm({
         empleadoId: "",
         vehiculoId: "",
@@ -69,7 +69,7 @@ export default function Registros() {
     if (!confirm("¿Borrar registro?")) return;
   
     try {
-      await axios.delete(`http://localhost:4000/registros/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/registros/${id}`);
   
       Swal.fire({
         icon: "success",
