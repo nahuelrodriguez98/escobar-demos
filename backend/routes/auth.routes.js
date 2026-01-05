@@ -92,7 +92,7 @@ router.get(
     );
 
     return res.redirect(
-      `http://localhost:5173/auth/success?token=${token}`
+      `${import.meta.env.FRONTEND_URL}/auth/success?token=${token}`
     );
   }
 );

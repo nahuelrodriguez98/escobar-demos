@@ -50,7 +50,7 @@ passport.use(
       responseMode: "query",
       responseType: "code",
       //redirectUrl: "http://localhost:4000/auth/callback",
-      redirectUrl: "https://escobar-demos-7cl12k5u8-natta1998s-projects.vercel.app/auth/callback",
+      redirectUrl: `${import.meta.env.VITE_API_URL}/auth/callback`,
       allowHttpForRedirectUrl: true,
       clientSecret: process.env.AZURE_CLIENT_SECRET,
       validateIssuer: true,
