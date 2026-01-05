@@ -50,7 +50,7 @@ passport.use(
       responseMode: "query",
       responseType: "code",
       //redirectUrl: "http://localhost:4000/auth/callback",
-      redirectUrl: `${import.meta.env.VITE_API_URL}/auth/callback`,
+      redirectUrl: `${process.env.VITE_API_URL}/auth/callback`,
       allowHttpForRedirectUrl: true,
       clientSecret: process.env.AZURE_CLIENT_SECRET,
       validateIssuer: true,

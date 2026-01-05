@@ -92,7 +92,7 @@ router.get(
     );
 
     return res.redirect(
-      `${import.meta.env.FRONTEND_URL}/auth/success?token=${token}`
+      `${process.env.FRONTEND_URL}/auth/success?token=${token}`
     );
   }
 );
