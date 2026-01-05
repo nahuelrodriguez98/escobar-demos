@@ -136,7 +136,7 @@ export default function FinalizarViaje() {
         />
       </div>
 
-      <button className="btn btn-primary" onClick={finalizar}>
+      <button className="boton-finalizar" onClick={finalizar}>
         Finalizar viaje
       </button>
     </div>
