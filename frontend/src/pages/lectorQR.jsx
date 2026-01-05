@@ -9,7 +9,6 @@ class QrScanner extends Component {
     this.qrCodeId = 'qr-reader';
   }
 
-  // Se ejecuta después de que el componente se monta
   componentDidMount() {
     const { onDecode } = this.props;
 
@@ -22,17 +21,19 @@ class QrScanner extends Component {
     this.scanner.render(
       (decodedText) => {
         onDecode(decodedText);
-        this.scanner.clear().catch(error => console.error("Error al limpiar el scanner:", error));
+        this.scanner.clear().catch(err =>
+          console.error("Error al limpiar el scanner:", err)
+        );
       },
-      (err) => {
-        
-      }
+      () => {}
     );
   }
 
   componentWillUnmount() {
     if (this.scanner) {
-      this.scanner.clear().catch(error => console.error("Error al limpiar el scanner:", error));
+      this.scanner.clear().catch(err =>
+        console.error("Error al limpiar el scanner:", err)
+      );
     }
   }
 
@@ -40,13 +41,19 @@ class QrScanner extends Component {
     const { onClose } = this.props;
 
     return (
-      <div className="qr-scanner-overlay">
-        <div className="qr-scanner-modal">
-          <h2 className="qr-scanner-title">Escanear Código QR</h2>
-          
-          <div id={this.qrCodeId} className="qr-reader-viewport"></div>
-          
-          <button className="close-btn" onClick={onClose}>
+      <div className="qr-overlay">
+        <div className="qr-modal">
+          <h2 className="qr-title">Escanear código QR</h2>
+
+          <p className="qr-hint">
+            Apuntá la cámara al QR del vehículo
+          </p>
+
+          <div className="qr-camera-wrapper">
+            <div id={this.qrCodeId} className="qr-reader" />
+          </div>
+
+          <button className="qr-close-btn" onClick={onClose}>
             Cerrar
           </button>
         </div>
