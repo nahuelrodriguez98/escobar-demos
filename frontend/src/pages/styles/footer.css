@@ -3,82 +3,101 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  box-sizing: border-box;
+  height: 40px; 
   z-index: 1000;
-
-  min-height: 36px; /* mejor que height fija */
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 24px;
+  background: #0f172a;
+  color: #f1f5f9;
+  border-top: 1px solid #1e293b;
+  font-family: 'Inter', system-ui, sans-serif;
+}
 
-  padding: 0 20px;
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label-panel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.1em;
+}
+
+.rol-badge {
+  font-size: 0.75rem;
   background: #1e293b;
-  color: #e2e8f0;
-  border-top: 1px solid #334155;
-}
-
-/* Izquierda */
-.footer-left h4 {
-  margin: 0;
-  font-size: 0.85rem;
-  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #3b82f6; 
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #94a3b8;
-  white-space: nowrap;
 }
 
-/* Derecha */
 .footer-right {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 12px;
 }
 
-.footer-right span {
+.user-info {
   font-size: 0.8rem;
-  opacity: 0.9;
-  white-space: nowrap;
+  color: #94a3b8;
 }
 
-/* Dot */
+.user-info strong {
+  color: #f1f5f9;
+}
+
+.status-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 10px;
+}
+
 .status-dot {
-  width: 6px;
-  height: 6px;
-  background-color: #4ade80;
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
   border-radius: 50%;
-  display: inline-block;
+  z-index: 2;
 }
 
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .admin-footer {
-    padding: 6px 12px;
-    min-height: 44px;
-  }
+.status-pulse {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
 
-  .footer-left h4 {
-    font-size: 0.75rem;
-  }
-
-  .footer-right span {
-    font-size: 0.75rem;
-  }
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(3); opacity: 0; }
 }
 
 @media (max-width: 480px) {
   .admin-footer {
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    padding: 6px 8px;
+    padding: 0 12px;
+    height: 36px;
+  }
+  
+  .label-panel {
+    display: none; 
   }
 
-  .footer-left h4 {
-    font-size: 0.7rem;
+  .rol-badge {
+    font-size: 0.65rem;
   }
 
-  .footer-right span {
+  .user-info {
     font-size: 0.7rem;
   }
 }
