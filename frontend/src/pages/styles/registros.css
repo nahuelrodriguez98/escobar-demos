@@ -24,12 +24,12 @@ body {
 
 .section-title {
   color: var(--primary-color);
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   font-size: 1.8rem;
   font-weight: 600;
   text-align: center;
   text-shadow: 2px 2px 4px rgba(0, 17, 52, 0.2);
-
+  margin-top: 20px;
 }
 
 .app-card {
@@ -163,7 +163,7 @@ body {
 
 .gauge-center {
   position: absolute;
-  bottom: -5px;
+  bottom: -20px;
   left: 0;
   width: 100%;
   text-align: center;
@@ -175,12 +175,13 @@ body {
 
 .gauge-slider {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
   appearance: none;
   -webkit-appearance: none;
   height: 8px;
   background: var(--border-color);
   border-radius: 4px;
+  margin-bottom: 5px;
 }
 
 .gauge-slider::-webkit-slider-thumb {
@@ -205,6 +206,52 @@ body {
   border-radius: 8px;
   font-size: 14px;
   color: #0f172a;
+}
+
+.form-row {
+  justify-content: center;
+}
+
+.botonQR {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.botonQR i {
+  font-size: 1.1rem;
+  justify-content: center;
+}
+
+.botonQR span {
+  white-space: nowrap;
+}
+
+.botonQR:hover {
+  transform: translateY(-1px);
+  background: #0056b3;
+
+}
+
+.botonQR:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+}
+
+.botonQR:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4),
+    0 10px 25px rgba(37, 99, 235, 0.35);
 }
 
 @media (max-width: 600px) {
@@ -238,57 +285,7 @@ body {
   .vehiculo-seleccionado-info {
     justify-content: center;
   }
-}
-.form-row {
-  justify-content: center;
-}
-.botonQR {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
-  background: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
-}
 
-/* ICONO */
-.botonQR i {
-  font-size: 1.1rem;
-  justify-content: center;
-}
-
-/* TEXTO */
-.botonQR span {
-  white-space: nowrap;
-}
-
-/* HOVER */
-.botonQR:hover {
-  transform: translateY(-1px);
-  background: #0056b3;
-}
-
-/* ACTIVE */
-.botonQR:active {
-  transform: translateY(0);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-}
-
-/* FOCUS (accesibilidad) */
-.botonQR:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.4),
-    0 10px 25px rgba(37, 99, 235, 0.35);
-}
-
-/* RESPONSIVE */
-@media (max-width: 480px) {
   .botonQR {
     width: 100%;
     justify-content: center;
