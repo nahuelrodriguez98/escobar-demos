@@ -30,7 +30,9 @@
   color: var(--text-main);
   overflow: hidden;
 }
-
+.title-vehiculos {
+  margin-bottom: 25px;
+}
 /* ================= SIDEBAR ================= */
 
 .sidebar-wrapper {

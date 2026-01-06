@@ -63,7 +63,7 @@ export default function Empleados() {
 
  return (
   <AdminLayout>
-   <h2>Empleados</h2>
+   <h2 className='title-vehiculos'>Empleados</h2>
    
    <div className="card">
     <div className="form-row">
