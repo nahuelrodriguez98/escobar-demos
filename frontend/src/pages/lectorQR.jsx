@@ -1,40 +1,58 @@
 import React, { Component } from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import '../pages/styles/QrScanner.css'; 
 
 class QrScanner extends Component {
   constructor(props) {
     super(props);
-    this.scanner = null;
+    this.html5QrCode = null;
     this.qrCodeId = 'qr-reader';
   }
 
   componentDidMount() {
+    this.startScanner();
+  }
+
+  async startScanner() {
     const { onDecode } = this.props;
+    
+    // Inicializamos la instancia manual
+    this.html5QrCode = new Html5Qrcode(this.qrCodeId);
 
-    this.scanner = new Html5QrcodeScanner(
-      this.qrCodeId,
-      { fps: 10, qrbox: 250 },
-      false
-    );
+    const config = { 
+      fps: 10, 
+      qrbox: { width: 250, height: 250 } 
+    };
 
-    this.scanner.render(
-      (decodedText) => {
-        onDecode(decodedText);
-        this.scanner.clear().catch(err =>
-          console.error("Error al limpiar el scanner:", err)
-        );
-      },
-      () => {}
-    );
+    try {
+      // Forzamos el uso de la cámara trasera (environment)
+      await this.html5QrCode.start(
+        { facingMode: "environment" }, 
+        config,
+        (decodedText) => {
+          onDecode(decodedText);
+          this.stopScanner();
+        },
+        () => { /* Error de escaneo silencioso */ }
+      );
+    } catch (err) {
+      console.error("Error al iniciar la cámara:", err);
+    }
+  }
+
+  async stopScanner() {
+    if (this.html5QrCode && this.html5QrCode.isScanning) {
+      try {
+        await this.html5QrCode.stop();
+        this.html5QrCode.clear();
+      } catch (err) {
+        console.error("Error al detener el scanner:", err);
+      }
+    }
   }
 
   componentWillUnmount() {
-    if (this.scanner) {
-      this.scanner.clear().catch(err =>
-        console.error("Error al limpiar el scanner:", err)
-      );
-    }
+    this.stopScanner();
   }
 
   render() {
@@ -43,18 +61,23 @@ class QrScanner extends Component {
     return (
       <div className="qr-overlay">
         <div className="qr-modal">
-          <h2 className="qr-title">Escanear código QR</h2>
-
-          <p className="qr-hint">
-            Apuntá la cámara al QR del vehículo
-          </p>
-
-          <div className="qr-camera-wrapper">
-            <div id={this.qrCodeId} className="qr-reader" />
+          <div className="qr-header">
+             <h2 className="qr-title">Escanea el código</h2>
+             <p className="qr-hint">Apuntá al QR del vehículo</p>
           </div>
 
-          <button className="qr-close-btn" onClick={onClose}>
-            Cerrar
+          <div className="qr-camera-container">
+            <div id={this.qrCodeId} className="qr-video-feed" />
+            {/* Marco decorativo para simular el escaneo */}
+            <div className="qr-scanner-overlay">
+                <div className="qr-target-box"></div>
+            </div>
+          </div>
+
+          <button className="qr-close-btn" onClick={() => {
+            this.stopScanner().then(() => onClose());
+          }}>
+            Cancelar
           </button>
         </div>
       </div>
