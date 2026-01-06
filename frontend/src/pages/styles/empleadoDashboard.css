@@ -1,61 +1,119 @@
+:root {
+  --primary-deep: #002d70;
+  --primary-accent: #007bff;
+  --bg-soft: #f4f7fa;
+  --text-main: #1a202c;
+  --text-muted: #718096;
+}
+
 .empleado-dashboard {
-  padding: 30px;
-  
+  padding: 20px;
+  background-color: var(--bg-soft);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+.welcome-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
 }
 
 .empleado-titulo {
+  font-size: 2.2rem;
+  color: var(--primary-deep);
+  font-weight: 800;
+  margin-top: 5px;
+  position: relative;
+}
+
+/* TABS ESTILO PILL */
+.tabs-container {
   display: flex;
-  font-size: 28px;
-  margin-bottom: 5%;
-  font-weight: bold;
   justify-content: center;
- 
+  margin-bottom: 25px;
 }
 
-.empleado-titulo h2{
-  margin-top: 4%;
-  color:#002d70;
-}
-
-.empleado-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  margin-top: 15px;
-}
-
-.tabs {
+.tabs-wrapper {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  justify-content: center;
+  background: #e2e8f0;
+  padding: 6px;
+  border-radius: 14px;
+  gap: 4px;
   width: 100%;
+  max-width: 500px;
 }
 
 .tab {
-  padding: 10px 15px;
-  background: #ddd;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  width: 32%;
-}
-
-.empleado-logo {
-  max-width: 220px;
-  height: auto;
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.tab:hover {
-  background: #ccc;
+.tab-icon {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
 }
 
 .tab.active {
-  background: #007bff;
-  color: white;
-  
+  background: #ffffff;
+  color: var(--primary-accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tab:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-main);
+}
+
+/* CONTENEDOR PRINCIPAL */
+.empleado-card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 45, 112, 0.05);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Animación de entrada al cambiar de tab */
+.tab-content-anim {
+  animation: fadeInDown 0.4s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+  .empleado-titulo { font-size: 1.8rem; }
+  .tab { font-size: 0.75rem; padding: 10px 5px; }
+  .tab-icon { font-size: 1rem; }
 }

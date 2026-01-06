@@ -12,40 +12,53 @@ export default function EmpleadoDashboard() {
 
   return (
     <div className="empleado-dashboard">
+      {/* HEADER SECCIÓN */}
+      <header className="dashboard-header">
+        <div className="header-content">
+          <span className="welcome-text">Bienvenido de nuevo,</span>
+          <h1 className="empleado-titulo">Escobar Demos</h1>
+        </div>
+      </header>
 
-      <h2 className="empleado-titulo">Panel del Empleado</h2>
+      {/* TABS CON ESTILO PILL */}
+      <nav className="tabs-container">
+        <div className="tabs-wrapper">
+          <button
+            className={tab === "registrar" ? "tab active" : "tab"}
+            onClick={() => setTab("registrar")}
+          >
+            <span className="tab-icon">📋</span>
+            Registrar
+          </button>
 
-      {/* TABS */}
-      <div className="tabs">
-        <button
-          className={tab === "registrar" ? "tab active" : "tab"}
-          onClick={() => setTab("registrar")}
-        >
-          Registrar uso
-        </button>
+          <button
+            className={tab === "registros" ? "tab active" : "tab"}
+            onClick={() => setTab("registros")}
+          >
+            <span className="tab-icon">🕒</span>
+            Historial
+          </button>
 
-        <button
-          className={tab === "registros" ? "tab active" : "tab"}
-          onClick={() => setTab("registros")}
-        >
-          Mis registros
-        </button>
+          <button
+            className={tab === "finalizar" ? "tab active" : "tab"}
+            onClick={() => setTab("finalizar")}
+          >
+            <span className="tab-icon">🏁</span>
+            Finalizar
+          </button>
+        </div>
+      </nav>
 
-        <button
-          className={tab === "finalizar" ? "tab active" : "tab"}
-          onClick={() => setTab("finalizar")}
-        >
-          Finalizar viaje
-        </button>
-      </div>
-
-      <div className="empleado-card">
-        {tab === "registrar" && <RegistrarUso />}
-        {tab === "registros" && <MisRegistros />}
-        {tab === "finalizar" && <FinalizarViaje />}
-        
-                <FooterAdmin />
-      </div>
+      {/* CONTENIDO */}
+      <main className="empleado-card">
+        <div className="tab-content-anim">
+          {tab === "registrar" && <RegistrarUso />}
+          {tab === "registros" && <MisRegistros />}
+          {tab === "finalizar" && <FinalizarViaje />}
+        </div>
+      </main>
+      
+      <FooterAdmin />
     </div>
   );
 }
