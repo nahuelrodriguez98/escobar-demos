@@ -1,91 +1,112 @@
-.finalizar-viaje-content{
+.finalizar-viaje-content {
   display: flex;
   justify-content: center;
+  align-items: flex-start; 
+  width: 100%;
+  padding: 10px; 
 }
 
 .finalizar-viaje {
-  border-radius: 12px;
-  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px; 
+  padding: 20px; 
+  width: 100%;
   max-width: 600px;
   margin: 0 auto;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .finalizar-viaje h3 {
-  font-size: 1.875rem;
-  font-weight: 600;
+  font-size: 1.5rem; 
+  font-weight: 700;
   color: #007bff;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   text-align: center;
-  text-shadow: 2px 2px 4px rgba(0, 17, 52, 0.2);
-} 
+}
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px; 
+  margin-bottom: 20px;
+}
+
+.form-row label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: -8px; 
 }
 
 .form-row select,
 .form-row input {
   width: 100%;
-  padding: 12px 14px;
-  font-size: 0.95rem;
-  border-radius: 8px;
+  height: 48px; 
+  padding: 0 14px;
+  font-size: 1rem; 
+  border-radius: 10px;
   border: 1px solid #d1d5db;
-  background-color: #fff;
-  color: #111827;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
 }
 
 .form-row select:focus,
 .form-row input:focus {
+  background-color: #fff;
   border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  outline: none;
 }
 
-.form-row input::placeholder {
-  color: #9ca3af;
-} 
-
 .boton-finalizar {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  padding: 0 24px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-
-.boton-finalizar {
   width: 100%;
+  height: 50px; 
   background-color: #007bff;
   color: #ffffff;
-  font-weight: 600;
-  margin-top: 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
 }
-
 .boton-finalizar:hover {
-  background-color: #0056b3;
-  transform: translateY(-1px);
-}
 
-.boton-finalizar:active {
-  transform: translateY(1px);
+  background-color: #0056b3;
+
+  transform: translateY(-1px);
+
 }
 
 @media (min-width: 640px) {
-  .form-row {
-    grid-template-columns: 1fr 1fr;
+  .finalizar-viaje {
+    padding: 32px; 
   }
-  .form-row select {
+
+  .finalizar-viaje h3 {
+    font-size: 1.875rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px;
+  }
+
+  .form-row .full-width {
     grid-column: span 2;
+  }
+}
+
+@media (max-width: 360px) {
+  .finalizar-viaje {
+    padding: 15px;
+  }
+  
+  .finalizar-viaje h3 {
+    font-size: 1.25rem;
   }
 }
