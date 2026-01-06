@@ -30,7 +30,6 @@ const cargarEmpleado = async () => {
 
   const local = JSON.parse(localStorage.getItem("empleado"));
   if (local?.id) return local;
-
   return null;
 };
 
@@ -98,8 +97,6 @@ export default function RegistrarUso() {
     observaciones: "",
   });
 
-  /* ===================== EFFECTS ===================== */
-
   useEffect(() => {
     cargarEmpleado().then((emp) => {
       setEmpleado(emp);
@@ -120,8 +117,6 @@ export default function RegistrarUso() {
       combustibleCargado: combustible,
     }));
   }, [combustible]);
-
-  /* ===================== HANDLERS ===================== */
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -176,9 +171,7 @@ export default function RegistrarUso() {
         return;
       }
 
-      const vehiculoEncontrado = vehiculos.find(
-        (v) => v.id == parsed.id
-      );
+      const vehiculoEncontrado = vehiculos.find((v) => v.id == parsed.id);
 
       setForm((prev) => ({
         ...prev,
@@ -200,15 +193,21 @@ export default function RegistrarUso() {
   };
 
   const registrar = async () => {
-    if (!form.empleadoId) {
-      Swal.fire("Error", "No se encontró el empleado logueado", "error");
-      return;
-    }
+    if (!form.empleadoId)
+      return Swal.fire("Error", "No se encontró el empleado logueado", "error");
 
-    if (!form.vehiculoId) {
-      Swal.fire("Atención", "Seleccioná o escaneá un vehículo", "warning");
-      return;
-    }
+    if (!form.vehiculoId)
+      return Swal.fire("Atención", "Seleccioná o escaneá un vehículo", "warning");
+
+    if (!form.fechaSalida)
+      return Swal.fire("Falta fecha", "Cargá la fecha de salida", "warning");
+
+    if (!form.kilometrajeSalida)
+      return Swal.fire(
+        "Falta kilometraje",
+        "Cargá el kilometraje de salida",
+        "warning"
+      );
 
     const viajeAbierto = await verificarViajeAbierto(form.empleadoId);
     if (viajeAbierto.length > 0) {
@@ -222,6 +221,7 @@ export default function RegistrarUso() {
 
     const datos = {
       ...form,
+      kilometrajeSalida: Number(form.kilometrajeSalida),
       fechaSalida: convertirFechaSQL(form.fechaSalida),
     };
 
@@ -251,7 +251,6 @@ export default function RegistrarUso() {
       <h3 className="section-title">Registrar Uso del Vehículo</h3>
 
       <div className="app-card form-container">
-        {/* QR */}
         <div className="form-row qr-row">
           <button
             type="button"
@@ -261,15 +260,6 @@ export default function RegistrarUso() {
             <i className="fas fa-qrcode" />
             <span>Escanear QR del vehículo</span>
           </button>
-
-          {form.vehiculoId && (
-            <div className="vehiculo-seleccionado-info">
-              <i className="fas fa-car" />
-              <span>Vehículo:</span>
-              <strong>{form.vehiculoId}</strong>
-              <small>Seleccionado</small>
-            </div>
-          )}
         </div>
 
         {mostrarQR && (
@@ -280,7 +270,6 @@ export default function RegistrarUso() {
           />
         )}
 
-        {/* Vehículo + Fecha */}
         <div className="form-row">
           <div className="input-group">
             <label className="input-label">Vehículo</label>
@@ -313,7 +302,6 @@ export default function RegistrarUso() {
           </div>
         </div>
 
-        {/* KM + Combustible */}
         <div className="form-row">
           <div className="input-group">
             <label className="input-label">Kilometraje de Salida (km)</label>
@@ -332,7 +320,6 @@ export default function RegistrarUso() {
           />
         </div>
 
-        {/* Destino + Obs */}
         <div className="form-row">
           <div className="input-group">
             <label className="input-label">Destino</label>
