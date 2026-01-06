@@ -86,8 +86,12 @@ router.post("/", async (req, res) => {
 router.put("/finalizar/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const { kilometrajeRetorno, fechaRetorno, observaciones } = req.body;
+    
+    // Convertimos explícitamente a Number para evitar errores de comparación
+    const kilometrajeRetorno = Number(req.body.kilometrajeRetorno);
+    const { fechaRetorno, observaciones } = req.body;
 
+    // 1. Verificar si el registro existe
     const datos = await query(
       `SELECT * FROM registros_uso WHERE id = $1`,
       [id]
@@ -99,16 +103,19 @@ router.put("/finalizar/:id", async (req, res) => {
 
     const r = datos.rows[0];
 
+    // 2. Verificar si ya fue finalizado
     if (r.fecha_retorno) {
       return res.status(400).json({ error: "El registro ya está finalizado" });
     }
 
-    if (kilometrajeRetorno <= r.kilometraje_salida) {
+    // 3. Validar kilometraje (Ahora comparamos Number vs Number)
+    if (isNaN(kilometrajeRetorno) || kilometrajeRetorno <= r.kilometraje_salida) {
       return res.status(400).json({
-        error: "El kilometraje de retorno debe ser mayor al de salida",
+        error: `El kilometraje de retorno (${kilometrajeRetorno}) debe ser mayor al de salida (${r.kilometraje_salida})`,
       });
     }
 
+    // 4. Ejecutar el UPDATE
     await query(
       `
       UPDATE registros_uso
@@ -123,10 +130,9 @@ router.put("/finalizar/:id", async (req, res) => {
     res.json({ mensaje: "Viaje finalizado correctamente" });
   } catch (err) {
     console.error("PUT /registros/finalizar", err);
-    res.status(500).json({ error: "Error servidor" });
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 });
-
 // Listar todos
 router.get("/", async (req, res) => {
   try {
