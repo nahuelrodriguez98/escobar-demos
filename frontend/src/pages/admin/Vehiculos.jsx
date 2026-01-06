@@ -24,12 +24,12 @@ export default function Vehiculos() {
       const storedUser = JSON.parse(localStorage.getItem('user'));
 
       if (!storedUser) {
-        const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`);
+        const r = await axios.get('http://localhost:4000/vehiculos');
         setList(r.data);
         return;
       }
 
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`, {
+      const r = await axios.get('http://localhost:4000/vehiculos', {
         params: {
           concesionaria_id: storedUser.concesionaria_id,
           rol: storedUser.rol
@@ -43,7 +43,7 @@ export default function Vehiculos() {
   };
 
   const loadConces = async () => {
-    const r = await axios.get(`${import.meta.env.VITE_API_URL}/concesionarias`);
+    const r = await axios.get("http://localhost:4000/concesionarias");
     setConces(r.data);
   };
 
@@ -54,7 +54,7 @@ export default function Vehiculos() {
         concesionaria_id: form.concesionaria_id ? Number(form.concesionaria_id) : null,
       };
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/vehiculos`, payload);
+      const res = await axios.post("http://localhost:4000/vehiculos", payload);
 
       Swal.fire({
         icon: "success",
@@ -83,7 +83,7 @@ export default function Vehiculos() {
     if (!confirm("¿Borrar vehículo?")) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`);
+      await axios.delete(`http://localhost:4000/vehiculos/${id}`);
 
       Swal.fire({
         icon: "success",
@@ -151,9 +151,9 @@ export default function Vehiculos() {
         <div className="card">
           <div className="form-row">
             <input placeholder="Patente" value={form.patente} onChange={(e) => setForm({ ...form, patente: e.target.value })} />
-            <input placeholder="Marca" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })}/>
-            <input placeholder="Modelo" value={form.modelo} onChange={(e) => setForm({ ...form, modelo: e.target.value })}/>
-            <select value={form.concesionaria_id} onChange={(e) =>setForm({ ...form, concesionaria_id: e.target.value })}>
+            <input placeholder="Marca" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} />
+            <input placeholder="Modelo" value={form.modelo} onChange={(e) => setForm({ ...form, modelo: e.target.value })} />
+            <select value={form.concesionaria_id} onChange={(e) => setForm({ ...form, concesionaria_id: e.target.value })}>
               <option value="">Elegir concesionaria</option>
               {conces.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -166,75 +166,78 @@ export default function Vehiculos() {
             </button>
           </div>
         </div>
-
         <div className="card">
+          <div className="filtro-box">
 
-          <div className="filtro-container">
-            <select
-              value={filterBy}
-              onChange={(e) => setFilterBy(e.target.value)}
-              className="form-select"
-            >
-              <option value="patente">Buscar por Patente</option>
-              <option value="marca">Buscar por Marca</option>
-              <option value="modelo">Buscar por Modelo</option>
-              <option value="concesionaria">Buscar por Concesionaria</option>
-            </select>
+            <div className="filtro-group">
+              <select
+                value={filterBy}
+                onChange={(e) => setFilterBy(e.target.value)}
+              >
+                <option value="patente">Buscar por Patente</option>
+                <option value="marca">Buscar por Marca</option>
+                <option value="modelo">Buscar por Modelo</option>
+                <option value="concesionaria">Buscar por Concesionaria</option>
+              </select>
 
-            <input
-              type="text"
-              placeholder={`Buscar por ${filterBy}`}
-              className="form-control"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+              <input
+                type="text"
+                placeholder={`Buscar por ${filterBy}`}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
 
-            <button
-              className="btn btn-secondary"
-              onClick={() => setSearch("")}
-              disabled={!search}
-            >
-              Limpiar Filtro
-            </button>
+            <div className="filtro-actions">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setSearch("")}
+                disabled={!search}
+              >
+                Limpiar filtro
+              </button>
+            </div>
+
           </div>
 
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Marca</th>
-                <th>Modelo</th>
-                <th>Patente</th>
-                <th>Concesionaria</th>
-                <th>Activo</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredVehiculos.map((v) => (
-                <tr key={v.id}>
-                  <td>{v.marca}</td>
-                  <td>{v.modelo}</td>
-                  <td>{v.patente}</td>
-                  <td>{v.concesionaria}</td>
-                  <td>{v.activo ? "Sí" : "No"}</td>
-                  <td>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => borrar(v.id)}>
-                      Borrar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredVehiculos.length === 0 && (
+
+          <div className="table-container">
+            <table className="responsive-table">
+              <thead>
                 <tr>
-                  <td colSpan="6" style={{ textAlign: 'center' }}>
-                    No se encontraron vehículos que coincidan con la búsqueda.
-                  </td>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Patente</th>
+                  <th>Concesionaria</th>
+                  <th>Activo</th>
+                  <th className="text-right">Acciones</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredVehiculos.map((v) => (
+                  <tr key={v.id}>
+                    <td data-label="Marca">{v.marca}</td>
+                    <td data-label="Modelo">{v.modelo}</td>
+                    <td data-label="Patente">{v.patente}</td>
+                    <td data-label="Concesionaria">{v.concesionaria}</td>
+                    <td data-label="Activo">
+                      <span className={`status-badge ${v.activo ? 'active' : 'inactive'}`}>
+                        {v.activo ? "Sí" : "No"}
+                      </span>
+                    </td>
+                    <td data-label="Acciones" className="text-right">
+                      <button className="btn btn-danger" onClick={() => borrar(v.id)}>
+                        Borrar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {filteredVehiculos.length === 0 && (
+              <div className="empty-state">No se encontraron vehículos.</div>
+            )}
+          </div>
         </div>
       </div>
     </AdminLayout>

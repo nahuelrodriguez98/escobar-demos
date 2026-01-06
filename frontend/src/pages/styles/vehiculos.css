@@ -1,113 +1,180 @@
+/* ================= VARIABLES Y RESET ================= */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary: #64748b;
+  --secondary-hover: #475569;
+  --danger: #dc3545;
+  --danger-hover: #b52a37;
+  --bg-light: #f8fafc;
+  --border-color: #e5e7eb;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+}
+
 .vehiculos-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-main);
 }
 
-.vehiculos-form {
-  align-items: flex-end;
+.title-vehiculos {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
 }
 
-.vehiculos-filtro {
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+/* ================= FORMULARIO CREACIÓN ================= */
+.form-row {
   display: flex;
-  gap: 15px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-row input, 
+.form-row select {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+/* ================= FILTROS ================= */
+.filtro-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 20px;
 }
 
-.filtro-select {
-  max-width: 220px;
-}
-
-.filtro-input {
+.filtro-group {
+  display: flex;
+  gap: 10px;
   flex: 1;
 }
 
-.btn-secondary {
-  background-color: var(--secondary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-
-.table-wrapper {
-  overflow-x: auto;
-}
-
-.vehiculos-table {
+/* ================= CONTENEDOR CON SCROLL ================= */
+.table-container {
   width: 100%;
-  border-collapse: collapse;
-  min-width: 700px;
+  max-height: 500px; /* Ajusta esta altura según prefieras */
+  overflow-y: auto;  /* Scroll vertical */
+  overflow-x: hidden; /* Evita scroll horizontal innecesario */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
 }
 
-.vehiculos-table thead {
+/* Personalización de la barra de scroll (Chrome/Safari) */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.responsive-table {
+  width: 100%;
+  border-collapse: separate; /* Cambiado para que el sticky funcione bien */
+  border-spacing: 0;
+}
+
+.responsive-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background-color: var(--bg-light);
+  padding: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--border-color);
 }
 
-.vehiculos-table th,
-.vehiculos-table td {
-  padding: 12px 14px;
+.responsive-table td {
+  padding: 14px;
   border-bottom: 1px solid var(--border-color);
-  text-align: left;
   font-size: 0.95rem;
 }
 
-.vehiculos-table th {
+.responsive-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* ================= BOTONES ================= */
+.btn {
+  padding: 10px 18px;
+  border-radius: 8px;
   font-weight: 600;
-  color: var(--text-color);
-}
-
-.vehiculos-table tbody tr:hover {
-  background-color: #f1f3f5;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
   cursor: pointer;
+  border: none;
+  transition: all 0.2s;
   font-size: 0.9rem;
 }
 
-.btn-danger:hover {
-  background-color: #b52a37;
-}
+.btn-primary { background: var(--primary); color: white; }
+.btn-danger { background: var(--danger); color: white; padding: 7px 14px; }
 
-@media (max-width: 900px) {
-  .vehiculos-filtro {
+/* ================= MODO RESPONSIVO (MÓVILES) ================= */
+
+@media (max-width: 800px) {
+  .table-container {
+    max-height: none; /* En móvil dejamos que crezca, o puedes dejarlo fijo */
+    border: none;
+  }
+
+  .filtro-box, .filtro-group, .form-row {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .filtro-select {
-    max-width: 100%;
+  .responsive-table thead {
+    display: none; /* Ocultamos cabecera sticky en móvil */
   }
-}
 
-@media (max-width: 600px) {
-  .vehiculos-container {
+  .responsive-table tr {
+    display: block;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-bottom: 15px;
     padding: 10px;
+    background: white;
   }
 
-  .vehiculos-form {
-    flex-direction: column;
-    gap: 15px;
+  .responsive-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5px;
+    border-bottom: 1px dashed var(--border-color);
   }
 
-  .primary-btn {
-    font-size: 1rem;
-    padding: 10px;
-  }
-
-  .vehiculos-table {
-    font-size: 0.85rem;
+  .responsive-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
   }
 }
