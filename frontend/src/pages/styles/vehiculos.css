@@ -1,165 +1,176 @@
-/* ================= VARIABLES Y RESET ================= */
+/* ================= VARIABLES ================= */
+
 :root {
   --primary: #2563eb;
-  --primary-hover: #1d4ed8;
   --secondary: #64748b;
-  --secondary-hover: #475569;
-  --danger: #dc3545;
-  --danger-hover: #b52a37;
-  --bg-light: #f8fafc;
-  --border-color: #e5e7eb;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-}
-
-.vehiculos-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--text-main);
-}
-
-.title-vehiculos {
-  margin-bottom: 1.5rem;
-  font-size: 1.75rem;
-  font-weight: 700;
-}
-
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  border: 1px solid var(--border-color);
-}
-
-/* ================= FORMULARIO CREACIÓN ================= */
-.form-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.form-row input, 
-.form-row select {
-  flex: 1;
-  min-width: 150px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  font-size: 0.95rem;
-  outline: none;
+  --danger: #ef4444;
+  --border: #e2e8f0;
+  --bg-header: #f8fafc;
+  --text-dark: #1e293b;
+  --text-light: #64748b;
 }
 
 /* ================= FILTROS ================= */
-.filtro-box {
+
+.filtro-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   margin-bottom: 20px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .filtro-group {
   display: flex;
   gap: 10px;
   flex: 1;
+  min-width: 280px;
 }
 
-/* ================= CONTENEDOR CON SCROLL ================= */
+.form-select, 
+.form-control {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.form-select {
+  width: 200px;
+  cursor: pointer;
+}
+
+.form-control {
+  flex: 1;
+}
+
+/* ================= CONTENEDOR TABLA ================= */
+
 .table-container {
   width: 100%;
-  max-height: 500px; /* Ajusta esta altura según prefieras */
-  overflow-y: auto;  /* Scroll vertical */
-  overflow-x: hidden; /* Evita scroll horizontal innecesario */
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  max-height: 550px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  position: relative;
 }
 
-/* Personalización de la barra de scroll (Chrome/Safari) */
-.table-container::-webkit-scrollbar {
-  width: 8px;
+/* Scroll */
+.table-container::-webkit-scrollbar { width: 6px; }
+.table-container::-webkit-scrollbar-thumb { 
+  background: #cbd5e1; 
+  border-radius: 10px; 
 }
-.table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-.table-container::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
-}
-.table-container::-webkit-scrollbar-thumb:hover {
-  background: #999;
-}
+
+/* ================= TABLA ================= */
 
 .responsive-table {
   width: 100%;
-  border-collapse: separate; /* Cambiado para que el sticky funcione bien */
+  border-collapse: separate;
   border-spacing: 0;
 }
 
 .responsive-table thead th {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background-color: var(--bg-light);
-  padding: 14px;
+  background-color: var(--bg-header);
+  color: var(--text-light);
   font-weight: 600;
-  color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  border-bottom: 2px solid var(--border-color);
+  padding: 15px;
+  border-bottom: 2px solid var(--border);
+  z-index: 2;
 }
 
 .responsive-table td {
-  padding: 14px;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 0.95rem;
+  padding: 15px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--text-dark);
 }
 
-.responsive-table tbody tr:hover {
-  background-color: #f8fafc;
+.responsive-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ================= BADGES ================= */
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 /* ================= BOTONES ================= */
+
 .btn {
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
   cursor: pointer;
   border: none;
-  transition: all 0.2s;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
-.btn-primary { background: var(--primary); color: white; }
-.btn-danger { background: var(--danger); color: white; padding: 7px 14px; }
+.btn-secondary { background: var(--secondary); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ================= MODO RESPONSIVO (MÓVILES) ================= */
+/* ================= EMPTY ================= */
 
-@media (max-width: 800px) {
-  .table-container {
-    max-height: none; /* En móvil dejamos que crezca, o puedes dejarlo fijo */
-    border: none;
-  }
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-light);
+}
 
-  .filtro-box, .filtro-group, .form-row {
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+  .filtro-container,
+  .filtro-group {
     flex-direction: column;
     align-items: stretch;
   }
 
+  .form-select {
+    width: 100%;
+  }
+
+  .table-container {
+    max-height: none;
+    border: none;
+  }
+
   .responsive-table thead {
-    display: none; /* Ocultamos cabecera sticky en móvil */
+    display: none;
   }
 
   .responsive-table tr {
     display: block;
-    border: 1px solid var(--border-color);
+    margin: 15px;
+    border: 1px solid var(--border);
     border-radius: 12px;
-    margin-bottom: 15px;
     padding: 10px;
-    background: white;
   }
 
   .responsive-table td {
@@ -167,14 +178,23 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 5px;
-    border-bottom: 1px dashed var(--border-color);
+    border-bottom: 1px solid #f1f5f9;
+    text-align: right;
+  }
+
+  .responsive-table td:last-child {
+    border-bottom: none;
+    justify-content: center;
+    padding-top: 12px;
   }
 
   .responsive-table td::before {
     content: attr(data-label);
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--text-light);
     font-size: 0.75rem;
     text-transform: uppercase;
+    flex: 1;
+    text-align: left;
   }
 }

@@ -24,39 +24,39 @@ export default function MisRegistros() {
   }, [empleado?.id]);
 
   return (
-    <div className="registros-container">
-      <h3>Mis Registros de Vehículos</h3>
+    <div className="misreg-container">
+      <h3 className="misreg-title">Mis registros de vehículos</h3>
 
       {registros.length === 0 ? (
-        <p>No hay registros de vehículos para mostrar.</p>
+        <p className="misreg-empty">No hay registros de vehículos para mostrar.</p>
       ) : (
-        <div className="table-responsive-wrapper">
-          <table className="table">
+        <div className="misreg-table-wrapper">
+          <table className="misreg-table">
             <thead>
               <tr>
-                <th>Fecha Salida</th>
+                <th>Fecha salida</th>
                 <th>Vehículo</th>
                 <th>Patente</th>
                 <th>Destino</th>
-                <th>Salida (Kms)</th>
-                <th>Retorno (Kms)</th>
-                <th>Fecha Retorno</th>
+                <th>Salida (km)</th>
+                <th>Retorno (km)</th>
+                <th>Fecha retorno</th>
               </tr>
             </thead>
             <tbody>
               {registros.map((x) => (
                 <tr key={x.id}>
-                  <td>{new Date(x.fechaSalida).toLocaleString()}</td>
-                  <td>{x.modelo}</td>
-                  <td>{x.patente}</td>
-                  <td>{x.destino}</td>
-                  <td>{x.kilometrajeSalida} Km</td>
-                  <td>
-                    {x.kilometrajeRetorno
-                      ? `${x.kilometrajeRetorno} Km`
-                      : "—"}
+                  <td data-label="Fecha salida">
+                    {new Date(x.fechaSalida).toLocaleString()}
                   </td>
-                  <td>
+                  <td data-label="Vehículo">{x.modelo}</td>
+                  <td data-label="Patente">{x.patente}</td>
+                  <td data-label="Destino">{x.destino}</td>
+                  <td data-label="Salida (km)">{x.kilometrajeSalida} km</td>
+                  <td data-label="Retorno (km)">
+                    {x.kilometrajeRetorno ? `${x.kilometrajeRetorno} km` : "—"}
+                  </td>
+                  <td data-label="Fecha retorno">
                     {x.fechaRetorno
                       ? new Date(x.fechaRetorno).toLocaleString()
                       : "—"}

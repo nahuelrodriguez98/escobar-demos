@@ -124,12 +124,13 @@ export default function Registros() {
     <AdminLayout>
       <h2 className="title-vehiculos">Registros de uso</h2>
 
-      {/* FORMULARIO DE CREACIÓN */}
+      {/* ========== FORMULARIO ========== */}
       <div className="card">
         <div className="form-row">
           <select
             value={form.empleadoId}
             onChange={(e) => setForm({ ...form, empleadoId: e.target.value })}
+            className="form-control"
           >
             <option value="">Empleado</option>
             {empleados.map((x) => (
@@ -140,6 +141,7 @@ export default function Registros() {
           <select
             value={form.vehiculoId}
             onChange={(e) => setForm({ ...form, vehiculoId: e.target.value })}
+            className="form-control"
           >
             <option value="">Vehículo</option>
             {vehiculos.map((x) => (
@@ -151,40 +153,49 @@ export default function Registros() {
             type="datetime-local"
             value={form.fechaSalida}
             onChange={(e) => setForm({ ...form, fechaSalida: e.target.value })}
+            className="form-control"
           />
 
           <input
             placeholder="Kilometraje"
             value={form.kilometrajeSalida}
             onChange={(e) => setForm({ ...form, kilometrajeSalida: e.target.value })}
+            className="form-control"
           />
         </div>
 
-        <div className="form-row" style={{ marginTop: '12px' }}>
+        <div className="form-row">
           <input
             placeholder="Destino"
             value={form.destino}
             onChange={(e) => setForm({ ...form, destino: e.target.value })}
+            className="form-control"
           />
+
           <input
             placeholder="Combustible (L)"
             value={form.combustibleCargado}
             onChange={(e) => setForm({ ...form, combustibleCargado: e.target.value })}
+            className="form-control"
           />
+
           <input
             placeholder="Observaciones"
             value={form.observaciones}
             onChange={(e) => setForm({ ...form, observaciones: e.target.value })}
+            className="form-control"
           />
+
           <button className="btn btn-primary" onClick={crear}>
             Crear registro
           </button>
         </div>
       </div>
 
-      {/* LISTADO Y FILTROS */}
+      {/* ========== LISTADO ========== */}
       <div className="card">
-        <div className="filtro-box">
+
+        <div className="filtro-container">
           <div className="filtro-group">
             <select
               value={filterBy}
@@ -192,7 +203,7 @@ export default function Registros() {
               className="form-select"
             >
               <option value="empleado">Buscar por empleado</option>
-              <option value="vehiculo">Buscar por vehículo (Patente)</option>
+              <option value="vehiculo">Buscar por vehículo</option>
             </select>
 
             <input
@@ -209,7 +220,7 @@ export default function Registros() {
             onClick={() => setSearch("")}
             disabled={!search}
           >
-            Limpiar Filtro
+            Limpiar filtro
           </button>
         </div>
 
@@ -222,7 +233,7 @@ export default function Registros() {
                 <th>Vehículo</th>
                 <th>Destino</th>
                 <th>Kilometraje</th>
-                <th className="text-right">Acciones</th>
+                <th className="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -237,7 +248,7 @@ export default function Registros() {
                   <td data-label="Kilometraje">
                     <span className="km-badge">{r.kilometrajeSalida} km</span>
                   </td>
-                  <td data-label="Acciones" className="text-right">
+                  <td data-label="Acciones" className="text-center">
                     <button className="btn btn-danger" onClick={() => borrar(r.id)}>
                       Borrar
                     </button>
@@ -246,6 +257,7 @@ export default function Registros() {
               ))}
             </tbody>
           </table>
+
           {filteredRegistros.length === 0 && (
             <div className="empty-state">No se encontraron registros.</div>
           )}
@@ -253,4 +265,5 @@ export default function Registros() {
       </div>
     </AdminLayout>
   );
+
 }

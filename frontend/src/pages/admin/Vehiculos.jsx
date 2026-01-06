@@ -144,7 +144,7 @@ export default function Vehiculos() {
     return valueToFilter?.toLowerCase().includes(searchTerm);
   });
 
-   return (
+    return (
     <AdminLayout>
       <div className="vehiculos-container">
         <h2 className="title-vehiculos">Vehículos</h2>
@@ -167,12 +167,15 @@ export default function Vehiculos() {
           </div>
         </div>
         <div className="card">
-          <div className="filtro-box">
+
+          {/* FILTROS */}
+          <div className="filtro-container">
 
             <div className="filtro-group">
               <select
                 value={filterBy}
                 onChange={(e) => setFilterBy(e.target.value)}
+                className="form-select"
               >
                 <option value="patente">Buscar por Patente</option>
                 <option value="marca">Buscar por Marca</option>
@@ -183,24 +186,23 @@ export default function Vehiculos() {
               <input
                 type="text"
                 placeholder={`Buscar por ${filterBy}`}
+                className="form-control"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
-            <div className="filtro-actions">
-              <button
-                className="btn btn-secondary"
-                onClick={() => setSearch("")}
-                disabled={!search}
-              >
-                Limpiar filtro
-              </button>
-            </div>
+            <button
+              className="btn btn-secondary"
+              onClick={() => setSearch("")}
+              disabled={!search}
+            >
+              Limpiar filtro
+            </button>
 
           </div>
 
-
+          {/* TABLA */}
           <div className="table-container">
             <table className="responsive-table">
               <thead>
@@ -210,7 +212,7 @@ export default function Vehiculos() {
                   <th>Patente</th>
                   <th>Concesionaria</th>
                   <th>Activo</th>
-                  <th className="text-right">Acciones</th>
+                  <th className="text-center">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -225,7 +227,7 @@ export default function Vehiculos() {
                         {v.activo ? "Sí" : "No"}
                       </span>
                     </td>
-                    <td data-label="Acciones" className="text-right">
+                    <td data-label="Acciones" className="text-center">
                       <button className="btn btn-danger" onClick={() => borrar(v.id)}>
                         Borrar
                       </button>
@@ -234,11 +236,13 @@ export default function Vehiculos() {
                 ))}
               </tbody>
             </table>
+
             {filteredVehiculos.length === 0 && (
               <div className="empty-state">No se encontraron vehículos.</div>
             )}
           </div>
         </div>
+
       </div>
     </AdminLayout>
   );
