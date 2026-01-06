@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../components/AdminLayout';
 import axios from 'axios';
+import "../styles/empleado.css"
 
 export default function Empleados() {
  const [list, setList] = useState([]);
