@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import axios from "axios";
-import "../styles/registros.css";
+import "../styles/registrosadmin.css";
 import Swal from "sweetalert2";
 
 export default function Registros() {
@@ -59,7 +59,7 @@ export default function Registros() {
         combustibleCargado: "",
         observaciones: "",
       });
-      load(); 
+      load();
     } catch (error) {
       console.error("Error al crear registro:", error);
     }
@@ -67,26 +67,26 @@ export default function Registros() {
 
   const borrar = async (id) => {
     if (!confirm("¿Borrar registro?")) return;
-  
+
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/registros/${id}`);
-  
+
       Swal.fire({
         icon: "success",
         title: "Registro eliminado",
         timer: 1200,
         showConfirmButton: false
       });
-  
+
       load(); // refresca la lista
     } catch (err) {
       console.error("Error al borrar registro:", err);
-  
+
       const msg =
         err.response?.data?.mensaje ||
         err.response?.data?.error ||
         "Error desconocido";
-  
+
       Swal.fire({
         icon: "error",
         title: "No se pudo borrar",
@@ -94,7 +94,7 @@ export default function Registros() {
       });
     }
   };
-  
+
   const filteredRegistros = list.filter((r) => {
     const searchTerm = search.toLowerCase().trim();
 
@@ -111,7 +111,7 @@ export default function Registros() {
       return r.patente?.toLowerCase().includes(searchTerm);
     }
 
-    return true; 
+    return true;
   });
 
   useEffect(() => {
@@ -122,7 +122,9 @@ export default function Registros() {
 
   return (
     <AdminLayout>
-      <h2>Registros de uso</h2>
+      <h2 className="title-vehiculos">Registros de uso</h2>
+
+      {/* FORMULARIO DE CREACIÓN */}
       <div className="card">
         <div className="form-row">
           <select
@@ -131,9 +133,7 @@ export default function Registros() {
           >
             <option value="">Empleado</option>
             {empleados.map((x) => (
-              <option key={x.id} value={x.id}>
-                {x.nombre}
-              </option>
+              <option key={x.id} value={x.id}>{x.nombre}</option>
             ))}
           </select>
 
@@ -143,9 +143,7 @@ export default function Registros() {
           >
             <option value="">Vehículo</option>
             {vehiculos.map((x) => (
-              <option key={x.id} value={x.id}>
-                {x.patente}
-              </option>
+              <option key={x.id} value={x.id}>{x.patente}</option>
             ))}
           </select>
 
@@ -158,13 +156,11 @@ export default function Registros() {
           <input
             placeholder="Kilometraje"
             value={form.kilometrajeSalida}
-            onChange={(e) =>
-              setForm({ ...form, kilometrajeSalida: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, kilometrajeSalida: e.target.value })}
           />
         </div>
 
-        <div className="form-row">
+        <div className="form-row" style={{ marginTop: '12px' }}>
           <input
             placeholder="Destino"
             value={form.destino}
@@ -173,99 +169,87 @@ export default function Registros() {
           <input
             placeholder="Combustible (L)"
             value={form.combustibleCargado}
-            onChange={(e) =>
-              setForm({ ...form, combustibleCargado: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, combustibleCargado: e.target.value })}
           />
-        </div>
-
-        <div className="form-row">
           <input
             placeholder="Observaciones"
             value={form.observaciones}
-            onChange={(e) =>
-              setForm({ ...form, observaciones: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, observaciones: e.target.value })}
           />
           <button className="btn btn-primary" onClick={crear}>
             Crear registro
           </button>
         </div>
       </div>
-      
-      <div className="cards table-container">
-        <div className="filtro-container">
-          
-          <select
-            value={filterBy}
-            onChange={(e) => setFilterBy(e.target.value)}
-            className="form-select"
-          >
-            <option value="empleado">Buscar por empleado</option>
-            <option value="vehiculo">Buscar por vehículo (Patente)</option>
-          </select>
 
-          <input
-            type="text"
-            placeholder={`Buscar por ${filterBy}`}
-            className="form-control"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          
+      {/* LISTADO Y FILTROS */}
+      <div className="card">
+        <div className="filtro-box">
+          <div className="filtro-group">
+            <select
+              value={filterBy}
+              onChange={(e) => setFilterBy(e.target.value)}
+              className="form-select"
+            >
+              <option value="empleado">Buscar por empleado</option>
+              <option value="vehiculo">Buscar por vehículo (Patente)</option>
+            </select>
+
+            <input
+              type="text"
+              placeholder={`Buscar por ${filterBy}`}
+              className="form-control"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
           <button
             className="btn btn-secondary"
             onClick={() => setSearch("")}
             disabled={!search}
           >
-            Limpiar Filtro 
+            Limpiar Filtro
           </button>
         </div>
 
-        <table className="table sticky-table">
-          <thead>
-            <tr>
-              <th>Fecha salida</th>
-              <th>Empleado</th>
-              <th>Vehículo</th>
-              <th>Destino</th>
-              <th>Kms</th>
-              <th>Eliminar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRegistros.map((r) => (
-              <tr key={r.id}>
-                <td>
-                  {r.fechaSalida
-                    ? new Date(r.fechaSalida).toLocaleString()
-                    : ""}
-                </td>
-                <td>{r.empleado}</td> 
-                <td>{r.patente}</td> 
-                <td>{r.destino}</td>
-                <td>
-                  {r.kilometrajeSalida} - {r.kilometrajeRetorno}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => borrar(r.id)}
-                  >
-                    Borrar
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {filteredRegistros.length === 0 && (
+        <div className="table-container">
+          <table className="responsive-table">
+            <thead>
               <tr>
-                <td colSpan="6" style={{ textAlign: 'center' }}>
-                  No se encontraron registros que coincidan con la búsqueda.
-                </td>
+                <th>Fecha salida</th>
+                <th>Empleado</th>
+                <th>Vehículo</th>
+                <th>Destino</th>
+                <th>Kilometraje</th>
+                <th className="text-right">Acciones</th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredRegistros.map((r) => (
+                <tr key={r.id}>
+                  <td data-label="Fecha salida">
+                    {r.fechaSalida ? new Date(r.fechaSalida).toLocaleString() : "-"}
+                  </td>
+                  <td data-label="Empleado"><strong>{r.empleado}</strong></td>
+                  <td data-label="Vehículo">{r.patente}</td>
+                  <td data-label="Destino">{r.destino}</td>
+                  <td data-label="Kilometraje">
+                    <span className="km-badge">{r.kilometrajeSalida} km</span>
+                  </td>
+                  <td data-label="Acciones" className="text-right">
+                    <button className="btn btn-danger" onClick={() => borrar(r.id)}>
+                      Borrar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {filteredRegistros.length === 0 && (
+            <div className="empty-state">No se encontraron registros.</div>
+          )}
+        </div>
       </div>
     </AdminLayout>
   );
