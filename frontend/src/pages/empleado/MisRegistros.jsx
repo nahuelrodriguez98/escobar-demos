@@ -44,21 +44,28 @@ export default function MisRegistros() {
               </tr>
             </thead>
             <tbody>
+              
               {registros.map((x) => (
                 <tr key={x.id}>
                   <td data-label="Fecha salida">
-                    {new Date(x.fechaSalida).toLocaleString()}
+                    {/* CORRECCIÓN: usar x.fecha_salida (con guion bajo) */}
+                    {x.fecha_salida ? new Date(x.fecha_salida).toLocaleString() : "—"}
                   </td>
                   <td data-label="Vehículo">{x.modelo}</td>
                   <td data-label="Patente">{x.patente}</td>
                   <td data-label="Destino">{x.destino}</td>
-                  <td data-label="Salida (km)">{x.kilometrajeSalida} km</td>
+                  <td data-label="Salida (km)">
+                    {/* CORRECCIÓN: usar x.kilometraje_salida */}
+                    {x.kilometraje_salida} km
+                  </td>
                   <td data-label="Retorno (km)">
-                    {x.kilometrajeRetorno ? `${x.kilometrajeRetorno} km` : "—"}
+                    {/* CORRECCIÓN: usar x.kilometraje_retorno */}
+                    {x.kilometraje_retorno ? `${x.kilometraje_retorno} km` : "—"}
                   </td>
                   <td data-label="Fecha retorno">
-                    {x.fechaRetorno
-                      ? new Date(x.fechaRetorno).toLocaleString()
+                    {/* CORRECCIÓN: usar x.fecha_retorno */}
+                    {x.fecha_retorno
+                      ? new Date(x.fecha_retorno).toLocaleString()
                       : "—"}
                   </td>
                 </tr>
