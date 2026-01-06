@@ -20,17 +20,21 @@ const getFechaHoraActual = () => {
 
 const cargarEmpleado = async () => {
   try {
-    const r = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
-      withCredentials: true,
-    });
-    if (r.data?.id) return r.data;
-  } catch (e) {
-    console.warn("No se pudo cargar empleado por API, revisando localStorage...");
-  }
+    // 1. Obtener el token que guardaste (asumiendo que lo guardas en localStorage)
+    const token = localStorage.getItem("token"); 
 
-  const local = JSON.parse(localStorage.getItem("empleado"));
-  if (local?.id) return local;
-  return null;
+    const r = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
+      headers: {
+        // 2. IMPORTANTE: Enviar el token aquí
+        Authorization: `Bearer ${token}` 
+      }
+    });
+    return r.data;
+  } catch (e) {
+    console.warn("Falla auth API, usando backup local...");
+    const local = JSON.parse(localStorage.getItem("empleado"));
+    return local || null;
+  }
 };
 
 /* ===================== COMPONENTES ===================== */
