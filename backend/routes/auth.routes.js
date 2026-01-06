@@ -124,26 +124,21 @@ router.post("/login", async (req, res) => {
 // User info
 // =======================
 router.get("/userinfo", (req, res) => {
-  let user = req.session.user;
-
   const auth = req.headers.authorization;
-  if (auth?.startsWith("Bearer ")) {
-    try {
-      const token = auth.split(" ")[1];
-      user = jwt.verify(
-        token,
-        process.env.JWT_SECRET || "mi_token_secreto_admin_escobar"
-      );
-    } catch {
-      return res.status(401).json({ error: "Token inválido" });
-    }
+
+  if (!auth || !auth.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "No se proporcionó token de autenticación" });
   }
 
-  if (!user) {
-    return res.status(401).json({ error: "No hay sesión activa" });
+  try {
+    const token = auth.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Si el token es válido, devolvemos los datos del usuario decodificados
+    return res.json(decoded);
+  } catch (err) {
+    console.error("JWT Verify Error:", err.message);
+    return res.status(401).json({ error: "Token inválido o expirado" });
   }
-
-  res.json(user);
 });
 
 module.exports = router;
