@@ -2,6 +2,7 @@
 import Sidebar from "../components/sidebar";
 import FooterAdmin from "../components/Navbar";
 import "../pages/styles/admindashboard.css";
+import { Outlet } from "react-router-dom";
 
 export default function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,12 +27,9 @@ export default function AdminDashboard() {
         </div>
 
         <div className="admin-main-content">
-          <h2 className="titulo-admin">Bienvenido al Panel de Administración</h2>
-          <p className="subtitulo-admin">
-            Seleccioná una opción del menú para empezar.
-          </p>
+          <Outlet />
         </div>
-
+        
         <FooterAdmin />
       </div>
     </div>
