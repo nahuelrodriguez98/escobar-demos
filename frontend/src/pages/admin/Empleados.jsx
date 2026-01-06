@@ -85,59 +85,77 @@ export default function Empleados() {
    </div>
   
    <div className="card">
-    {/* CONTROLES DE FILTRADO */}
-    <div className="filtro-container">
-     <select
-      value={filterBy}
-      onChange={(e) => setFilterBy(e.target.value)}
-      className="form-select"
-     >
-      <option value="nombre">Buscar por Nombre</option>
-      <option value="email">Buscar por Email</option>
-      <option value="concesionaria">Buscar por Concesionaria</option>
-     </select>
+  {/* CONTROLES DE FILTRADO */}
+  <div className="filtro-container">
+    <div className="filtro-group">
+      <select
+        value={filterBy}
+        onChange={(e) => setFilterBy(e.target.value)}
+        className="form-select"
+      >
+        <option value="nombre">Buscar por Nombre</option>
+        <option value="email">Buscar por Email</option>
+        <option value="concesionaria">Buscar por Concesionaria</option>
+      </select>
 
-     <input
-      type="text"
-      placeholder={`Buscar por ${filterBy}`}
-      className="form-control"
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-     />
+      <input
+        type="text"
+        placeholder={`Buscar por ${filterBy}`}
+        className="form-control"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+    </div>
 
-     <button
+    <button
       className="btn btn-secondary"
       onClick={() => setSearch("")}
       disabled={!search}
-     >
+    >
       Limpiar Filtro
-     </button>
-    </div>
+    </button>
+  </div>
 
-    {/* TABLA DE RESULTADOS (Usando filteredEmpleados) */}
-    <table className="table">
-     <thead><tr><th>Nombre</th><th>Email</th><th>Azure ID</th><th>Concesionaria</th><th>Rol</th><th>Eliminar</th></tr></thead>
-     <tbody>
-      {filteredEmpleados.map(u=>(
-       <tr key={u.id}>
-        <td>{u.nombre}</td>
-        <td>{u.email}</td>
-        <td>{u.azure_id}</td>
-        <td>{u.concesionaria}</td>
-        <td>{u.rol}</td>
-        <td><button className="btn btn-danger" onClick={()=>borrar(u.id)}>Borrar</button></td>
-       </tr>
-      ))}
-      {filteredEmpleados.length === 0 && (
-       <tr>
-        <td colSpan="6" style={{ textAlign: 'center' }}>
-         No se encontraron empleados que coincidan con la búsqueda.
-        </td>
-       </tr>
-      )}
-     </tbody>
+  {/* CONTENEDOR CON SCROLL VERTICAL */}
+  <div className="table-container">
+    <table className="responsive-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Azure ID</th>
+          <th>Concesionaria</th>
+          <th>Rol</th>
+          <th className="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filteredEmpleados.map((u) => (
+          <tr key={u.id}>
+            <td data-label="Nombre">{u.nombre}</td>
+            <td data-label="Email" className="email-cell">{u.email}</td>
+            <td data-label="Azure ID" className="text-muted-small">{u.azure_id}</td>
+            <td data-label="Concesionaria">{u.concesionaria}</td>
+            <td data-label="Rol">
+               <span className="rol-badge">{u.rol}</span>
+            </td>
+            <td data-label="Eliminar" className="text-center">
+              <button className="btn btn-danger" onClick={() => borrar(u.id)}>
+                Borrar
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
     </table>
-   </div>
+    
+    {filteredEmpleados.length === 0 && (
+      <div className="empty-state">
+        No se encontraron empleados que coincidan con la búsqueda.
+      </div>
+    )}
+  </div>
+</div>
   </AdminLayout>
  );
 }
