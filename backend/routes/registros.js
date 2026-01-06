@@ -58,6 +58,10 @@ router.post("/", async (req, res) => {
       observaciones,
     } = req.body;
 
+    if (!fechaSalida || !kilometrajeSalida) {
+      return res.status(400).json({ error: "Faltan datos obligatorios" });
+    }
+
     await query(
       `
       INSERT INTO registros_uso
@@ -65,13 +69,13 @@ router.post("/", async (req, res) => {
       VALUES ($1,$2,$3,$4,$5,$6,$7)
       `,
       [
-        empleadoId,
-        vehiculoId,
+        Number(empleadoId),
+        Number(vehiculoId),
         fechaSalida,
-        kilometrajeSalida,
-        destino,
-        combustibleCargado,
-        observaciones,
+        Number(kilometrajeSalida),
+        destino || null,
+        Number(combustibleCargado) || 0,
+        observaciones || null,
       ]
     );
 
