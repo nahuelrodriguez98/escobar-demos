@@ -20,9 +20,16 @@ export default function Registros() {
     observaciones: "",
   });
 
+  // Helper para obtener el config con el Token
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    return { headers: { Authorization: `Bearer ${token}` } };
+  };
+
   const load = async () => {
     try {
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`);
+      // Usamos el header para evitar el error 401
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`, getAuthHeader());
       setList(r.data);
     } catch (error) {
       console.error("Error al cargar registros:", error);
@@ -31,7 +38,7 @@ export default function Registros() {
 
   const loadEmpl = async () => {
     try {
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/empleados`);
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/empleados`, getAuthHeader());
       setEmpleados(r.data);
     } catch (error) {
       console.error("Error al cargar empleados:", error);
@@ -40,7 +47,7 @@ export default function Registros() {
 
   const loadVeh = async () => {
     try {
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`);
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`, getAuthHeader());
       setVehiculos(r.data);
     } catch (error) {
       console.error("Error al cargar vehículos:", error);
@@ -49,7 +56,8 @@ export default function Registros() {
 
   const crear = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/registros`, form);
+      await axios.post(`${import.meta.env.VITE_API_URL}/registros`, form, getAuthHeader());
+      Swal.fire("Éxito", "Registro creado", "success");
       setForm({
         empleadoId: "",
         vehiculoId: "",
@@ -62,55 +70,42 @@ export default function Registros() {
       load();
     } catch (error) {
       console.error("Error al crear registro:", error);
+      Swal.fire("Error", "No se pudo crear el registro", "error");
     }
   };
 
   const borrar = async (id) => {
-    if (!confirm("¿Borrar registro?")) return;
+    const result = await Swal.fire({
+      title: "¿Borrar registro?",
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, borrar",
+      cancelButtonText: "Cancelar"
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/registros/${id}`);
-
-      Swal.fire({
-        icon: "success",
-        title: "Registro eliminado",
-        timer: 1200,
-        showConfirmButton: false
-      });
-
-      load(); // refresca la lista
+      await axios.delete(`${import.meta.env.VITE_API_URL}/registros/${id}`, getAuthHeader());
+      Swal.fire("Eliminado", "El registro ha sido borrado", "success");
+      load();
     } catch (err) {
       console.error("Error al borrar registro:", err);
-
-      const msg =
-        err.response?.data?.mensaje ||
-        err.response?.data?.error ||
-        "Error desconocido";
-
-      Swal.fire({
-        icon: "error",
-        title: "No se pudo borrar",
-        text: msg,
-      });
+      Swal.fire("Error", "No se pudo eliminar", "error");
     }
   };
 
   const filteredRegistros = list.filter((r) => {
     const searchTerm = search.toLowerCase().trim();
-
-    if (!searchTerm) {
-      // Si está vacío, muestra todos los registros
-      return true;
-    }
+    if (!searchTerm) return true;
 
     if (filterBy === "empleado") {
       return r.empleado?.toLowerCase().includes(searchTerm);
     }
-
     if (filterBy === "vehiculo") {
       return r.patente?.toLowerCase().includes(searchTerm);
     }
-
     return true;
   });
 
@@ -122,7 +117,7 @@ export default function Registros() {
 
   return (
     <AdminLayout>
-      <h2 className="title-vehiculos">Registros de uso</h2>
+      <h2 className="title-vehiculos">Registros de uso (Admin)</h2>
 
       {/* ========== FORMULARIO ========== */}
       <div className="card">
@@ -132,7 +127,7 @@ export default function Registros() {
             onChange={(e) => setForm({ ...form, empleadoId: e.target.value })}
             className="form-control"
           >
-            <option value="">Empleado</option>
+            <option value="">Seleccionar Empleado</option>
             {empleados.map((x) => (
               <option key={x.id} value={x.id}>{x.nombre}</option>
             ))}
@@ -143,9 +138,9 @@ export default function Registros() {
             onChange={(e) => setForm({ ...form, vehiculoId: e.target.value })}
             className="form-control"
           >
-            <option value="">Vehículo</option>
+            <option value="">Seleccionar Vehículo</option>
             {vehiculos.map((x) => (
-              <option key={x.id} value={x.id}>{x.patente}</option>
+              <option key={x.id} value={x.id}>{x.patente} - {x.modelo}</option>
             ))}
           </select>
 
@@ -157,35 +152,34 @@ export default function Registros() {
           />
 
           <input
-            placeholder="Kilometraje"
+            type="number"
+            placeholder="Kilometraje Salida"
             value={form.kilometrajeSalida}
             onChange={(e) => setForm({ ...form, kilometrajeSalida: e.target.value })}
             className="form-control"
           />
         </div>
 
-        <div className="form-row">
+        <div className="form-row" style={{ marginTop: '10px' }}>
           <input
             placeholder="Destino"
             value={form.destino}
             onChange={(e) => setForm({ ...form, destino: e.target.value })}
             className="form-control"
           />
-
           <input
+            type="number"
             placeholder="Combustible (L)"
             value={form.combustibleCargado}
             onChange={(e) => setForm({ ...form, combustibleCargado: e.target.value })}
             className="form-control"
           />
-
           <input
             placeholder="Observaciones"
             value={form.observaciones}
             onChange={(e) => setForm({ ...form, observaciones: e.target.value })}
             className="form-control"
           />
-
           <button className="btn btn-primary" onClick={crear}>
             Crear registro
           </button>
@@ -194,7 +188,6 @@ export default function Registros() {
 
       {/* ========== LISTADO ========== */}
       <div className="card">
-
         <div className="filtro-container">
           <div className="filtro-group">
             <select
@@ -203,24 +196,18 @@ export default function Registros() {
               className="form-select"
             >
               <option value="empleado">Buscar por empleado</option>
-              <option value="vehiculo">Buscar por vehículo</option>
+              <option value="vehiculo">Buscar por patente</option>
             </select>
-
             <input
               type="text"
-              placeholder={`Buscar por ${filterBy}`}
+              placeholder={`Escriba para buscar...`}
               className="form-control"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-
-          <button
-            className="btn btn-secondary"
-            onClick={() => setSearch("")}
-            disabled={!search}
-          >
-            Limpiar filtro
+          <button className="btn btn-secondary" onClick={() => setSearch("")} disabled={!search}>
+            Limpiar
           </button>
         </div>
 
@@ -240,12 +227,14 @@ export default function Registros() {
               {filteredRegistros.map((r) => (
                 <tr key={r.id}>
                   <td data-label="Fecha salida">
+                    {/* CORRECCIÓN: Usar camelCase según el log de tu backend */}
                     {r.fechaSalida ? new Date(r.fechaSalida).toLocaleString() : "-"}
                   </td>
                   <td data-label="Empleado"><strong>{r.empleado}</strong></td>
-                  <td data-label="Vehículo">{r.patente}</td>
-                  <td data-label="Destino">{r.destino}</td>
+                  <td data-label="Vehículo">{r.patente} {r.modelo ? `- ${r.modelo}` : ''}</td>
+                  <td data-label="Destino">{r.destino || "N/A"}</td>
                   <td data-label="Kilometraje">
+                    {/* CORRECCIÓN: Usar camelCase */}
                     <span className="km-badge">{r.kilometrajeSalida} km</span>
                   </td>
                   <td data-label="Acciones" className="text-center">
@@ -265,5 +254,4 @@ export default function Registros() {
       </div>
     </AdminLayout>
   );
-
 }
