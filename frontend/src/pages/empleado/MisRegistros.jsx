@@ -12,11 +12,14 @@ export default function MisRegistros() {
   const load = async () => {
     try {
       setCargando(true); // Empieza la carga
+      console.log("1. Intentando cargar para empleado ID:", empleado?.id);
       const r = await axios.get(
         `${import.meta.env.VITE_API_URL}/registros/por-empleado/${empleado.id}`
       );
+      console.log("2. Datos que llegaron del backend:", r.data); // ¿Qué llegó?
       setRegistros(r.data);
     } catch (error) {
+      console.error("3. ERROR GRAVE:", error); // Si falló la conexión
       console.error("Error al cargar los registros:", error);
     } finally {
       // 2. Terminó la carga (sea éxito o error), quitamos el loading
