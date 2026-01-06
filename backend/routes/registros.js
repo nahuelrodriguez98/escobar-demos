@@ -7,7 +7,15 @@ router.get("/por-empleado/:empleadoId", async (req, res) => {
   try {
     const result = await query(
       `
-      SELECT r.*, v.patente, v.modelo
+      SELECT 
+        r.id,
+        r.fecha_salida AS "fechaSalida", 
+        r.fecha_retorno AS "fechaRetorno",
+        r.kilometraje_salida AS "kilometrajeSalida",
+        r.kilometraje_retorno AS "kilometrajeRetorno",
+        r.destino,
+        v.patente, 
+        v.modelo
       FROM registros_uso r
       LEFT JOIN vehiculos v ON r.vehiculo_id = v.id
       WHERE r.empleado_id = $1
@@ -15,7 +23,6 @@ router.get("/por-empleado/:empleadoId", async (req, res) => {
       `,
       [Number(req.params.empleadoId)]
     );
-
     res.json(result.rows);
   } catch (err) {
     console.error("GET /registros/por-empleado", err);
