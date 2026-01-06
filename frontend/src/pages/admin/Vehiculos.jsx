@@ -24,12 +24,12 @@ export default function Vehiculos() {
       const storedUser = JSON.parse(localStorage.getItem('user'));
 
       if (!storedUser) {
-        const r = await axios.get('http://localhost:4000/vehiculos');
+        const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`);
         setList(r.data);
         return;
       }
 
-      const r = await axios.get('http://localhost:4000/vehiculos', {
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`, {
         params: {
           concesionaria_id: storedUser.concesionaria_id,
           rol: storedUser.rol
@@ -43,7 +43,7 @@ export default function Vehiculos() {
   };
 
   const loadConces = async () => {
-    const r = await axios.get("http://localhost:4000/concesionarias");
+    const r = await axios.get(`${import.meta.env.VITE_API_URL}/concesionarias`);
     setConces(r.data);
   };
 
@@ -54,7 +54,7 @@ export default function Vehiculos() {
         concesionaria_id: form.concesionaria_id ? Number(form.concesionaria_id) : null,
       };
 
-      const res = await axios.post("http://localhost:4000/vehiculos", payload);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/vehiculos`, payload);
 
       Swal.fire({
         icon: "success",
@@ -83,7 +83,7 @@ export default function Vehiculos() {
     if (!confirm("¿Borrar vehículo?")) return;
 
     try {
-      await axios.delete(`http://localhost:4000/vehiculos/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/vehiculos/${id}`);
 
       Swal.fire({
         icon: "success",
@@ -144,7 +144,7 @@ export default function Vehiculos() {
     return valueToFilter?.toLowerCase().includes(searchTerm);
   });
 
-  return (
+   return (
     <AdminLayout>
       <div className="vehiculos-container">
         <h2 className="title-vehiculos">Vehículos</h2>
