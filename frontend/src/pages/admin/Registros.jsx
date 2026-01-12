@@ -228,7 +228,7 @@ export default function Registros() {
                 <tr key={r.id}>
                   <td data-label="Fecha salida">
                     {/* CORRECCIÓN: Usar camelCase según el log de tu backend */}
-                    {r.fechaSalida ? new Date(r.fechaSalida).toLocaleString() : "-"}
+                    {r.fechaSalida ? new Date(r.fechaSalida).toLocaleString() : "—"}
                   </td>
                   <td data-label="Empleado"><strong>{r.empleado}</strong></td>
                   <td data-label="Vehículo">{r.patente} {r.modelo ? `- ${r.modelo}` : ''}</td>
