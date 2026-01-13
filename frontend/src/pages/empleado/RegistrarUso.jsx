@@ -20,21 +20,18 @@ const getFechaHoraActual = () => {
 
 const cargarEmpleado = async () => {
   try {
-    // 1. Obtener el token que guardaste (asumiendo que lo guardas en localStorage)
-    const token = localStorage.getItem("token"); 
-
-    const r = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
-      headers: {
-        // 2. IMPORTANTE: Enviar el token aquí
-        Authorization: `Bearer ${token}` 
-      }
+    const r = await axios.get("http://localhost:4000/auth/userinfo", {
+      withCredentials: true,
     });
-    return r.data;
+    if (r.data?.id) return r.data;
   } catch (e) {
-    console.warn("Falla auth API, usando backup local...");
-    const local = JSON.parse(localStorage.getItem("empleado"));
-    return local || null;
+    console.warn("No se pudo cargar empleado por API, revisando localStorage...");
   }
+
+  const local = JSON.parse(localStorage.getItem("empleado"));
+  if (local?.id) return local;
+
+  return null;
 };
 
 /* ===================== COMPONENTES ===================== */
@@ -101,6 +98,8 @@ export default function RegistrarUso() {
     observaciones: "",
   });
 
+  /* ===================== EFFECTS ===================== */
+
   useEffect(() => {
     cargarEmpleado().then((emp) => {
       setEmpleado(emp);
@@ -122,6 +121,8 @@ export default function RegistrarUso() {
     }));
   }, [combustible]);
 
+  /* ===================== HANDLERS ===================== */
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -129,7 +130,7 @@ export default function RegistrarUso() {
   const verificarViajeAbierto = async (empleadoId) => {
     try {
       const r = await axios.get(
-        `${import.meta.env.VITE_API_URL}/registros/abiertos/${empleadoId}`
+        `http://localhost:4000/registros/abiertos/${empleadoId}`
       );
       return Array.isArray(r.data) ? r.data : [];
     } catch (err) {
@@ -149,10 +150,10 @@ export default function RegistrarUso() {
 
       let r;
       if (emp.rol === "empleado" || emp.rol === "admin") {
-        r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos/todos`);
+        r = await axios.get("http://localhost:4000/vehiculos/todos");
       } else {
         r = await axios.get(
-          `${import.meta.env.VITE_API_URL}/vehiculos/por-concesionaria/${emp.concesionaria_id}`
+          `http://localhost:4000/vehiculos/por-concesionaria/${emp.concesionaria_id}`
         );
       }
 
@@ -175,7 +176,9 @@ export default function RegistrarUso() {
         return;
       }
 
-      const vehiculoEncontrado = vehiculos.find((v) => v.id == parsed.id);
+      const vehiculoEncontrado = vehiculos.find(
+        (v) => v.id == parsed.id
+      );
 
       setForm((prev) => ({
         ...prev,
@@ -186,9 +189,8 @@ export default function RegistrarUso() {
       Swal.fire({
         icon: "success",
         title: "Vehículo detectado",
-        text: `Patente: ${
-          vehiculoEncontrado ? vehiculoEncontrado.patente : "Desconocida"
-        }`,
+        text: `Patente: ${vehiculoEncontrado ? vehiculoEncontrado.patente : "Desconocida"
+          }`,
       });
     } catch (err) {
       console.error(err);
@@ -197,21 +199,15 @@ export default function RegistrarUso() {
   };
 
   const registrar = async () => {
-    if (!form.empleadoId)
-      return Swal.fire("Error", "No se encontró el empleado logueado", "error");
+    if (!form.empleadoId) {
+      Swal.fire("Error", "No se encontró el empleado logueado", "error");
+      return;
+    }
 
-    if (!form.vehiculoId)
-      return Swal.fire("Atención", "Seleccioná o escaneá un vehículo", "warning");
-
-    if (!form.fechaSalida)
-      return Swal.fire("Falta fecha", "Cargá la fecha de salida", "warning");
-
-    if (!form.kilometrajeSalida)
-      return Swal.fire(
-        "Falta kilometraje",
-        "Cargá el kilometraje de salida",
-        "warning"
-      );
+    if (!form.vehiculoId) {
+      Swal.fire("Atención", "Seleccioná o escaneá un vehículo", "warning");
+      return;
+    }
 
     const viajeAbierto = await verificarViajeAbierto(form.empleadoId);
     if (viajeAbierto.length > 0) {
@@ -225,12 +221,11 @@ export default function RegistrarUso() {
 
     const datos = {
       ...form,
-      kilometrajeSalida: Number(form.kilometrajeSalida),
       fechaSalida: convertirFechaSQL(form.fechaSalida),
     };
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/registros`, datos);
+      await axios.post("http://localhost:4000/registros", datos);
 
       Swal.fire("Éxito", "Registro creado correctamente", "success");
 
@@ -255,6 +250,7 @@ export default function RegistrarUso() {
       <h3 className="section-title">Registrar Uso del Vehículo</h3>
 
       <div className="app-card form-container">
+        {/* QR */}
         <div className="form-row qr-row">
           <button
             type="button"
@@ -264,6 +260,15 @@ export default function RegistrarUso() {
             <i className="fas fa-qrcode" />
             <span>Escanear QR del vehículo</span>
           </button>
+
+          {form.vehiculoId && (
+            <div className="vehiculo-seleccionado-info">
+              <i className="fas fa-car" />
+              <span>Vehículo:</span>
+              <strong>{form.vehiculoId}</strong>
+              <small>Seleccionado</small>
+            </div>
+          )}
         </div>
 
         {mostrarQR && (
@@ -274,6 +279,7 @@ export default function RegistrarUso() {
           />
         )}
 
+        {/* Vehículo + Fecha */}
         <div className="form-row">
           <div className="input-group">
             <label className="input-label">Vehículo</label>
@@ -306,6 +312,7 @@ export default function RegistrarUso() {
           </div>
         </div>
 
+        {/* Destino */}
         <div className="form-row">
           <div className="input-group">
             <label className="input-label">Kilometraje de Salida (km)</label>
@@ -317,14 +324,6 @@ export default function RegistrarUso() {
               className="custom-input"
             />
           </div>
-
-          <FuelGauge
-            combustible={combustible}
-            setCombustible={setCombustible}
-          />
-        </div>
-
-        <div className="form-row">
           <div className="input-group">
             <label className="input-label">Destino</label>
             <input
@@ -335,18 +334,18 @@ export default function RegistrarUso() {
               className="custom-input"
             />
           </div>
-
-          <div className="input-group">
-            <label className="input-label">Observaciones</label>
-            <input
-              type="text"
-              name="observaciones"
-              value={form.observaciones}
-              onChange={handleChange}
-              className="custom-input"
-            />
-          </div>
         </div>
+        
+        {/* KM + Combustible */}
+        <div className="form-row">
+
+
+          <FuelGauge
+            combustible={combustible}
+            setCombustible={setCombustible}
+          />
+        </div>
+
 
         <button className="primary-btn" onClick={registrar}>
           Registrar Uso

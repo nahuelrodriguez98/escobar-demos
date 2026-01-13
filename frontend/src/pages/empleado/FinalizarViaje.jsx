@@ -11,11 +11,15 @@ export default function FinalizarViaje() {
     registroId: "",
     kilometrajeRetorno: "",
     fechaRetorno: "",
+    observaciones: "",
   });
 
   const load = async () => {
     try {
-      const r = await axios.get(`${API_URL}/registros/abiertos/${empleado.id}`);
+      const r = await axios.get(
+        "http://localhost:4000/registros/abiertos/${empleado.id}"
+      );
+
       setViajes(Array.isArray(r.data) ? r.data : [r.data]);
     } catch (err) {
       console.error("Error cargando viajes abiertos", err);
@@ -25,30 +29,25 @@ export default function FinalizarViaje() {
   useEffect(() => {
     load();
   }, []);
-
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   const finalizar = async () => {
-    // Validaciones básicas antes de enviar
-    if (!form.registroId || !form.kilometrajeRetorno || !form.fechaRetorno) {
+    if (!form.registroId) {
+
       Swal.fire({
         icon: "warning",
-        title: "Atención!",
-        text: "Todos los campos son obligatorios para finalizar el viaje.",
+        title: "Atencion!",
+        text: "Debe seleccionar un viaje antes de continuar.",
         confirmButtonText: "Aceptar",
       });
       return;
     }
 
     try {
-      // PREPARACIÓN DE DATOS PARA POSTGRESQL
-      const datosFinales = {
-        ...form,
-        kilometrajeRetorno: parseInt(form.kilometrajeRetorno, 10), // Forzar número
-        fechaRetorno: new Date(form.fechaRetorno).toISOString(), // Formato ISO para DB
-      };
-
       await axios.put(
-        `${API_URL}/registros/finalizar/${form.registroId}`,
-        datosFinales
+        "http://localhost:4000/registros/finalizar/${form.registroId}",
+        form
       );
 
       Swal.fire({
@@ -62,25 +61,38 @@ export default function FinalizarViaje() {
         registroId: "",
         kilometrajeRetorno: "",
         fechaRetorno: "",
+        observaciones: ""
       });
 
-      load(); // Recargar la lista de viajes abiertos
+      load();
     } catch (e) {
       console.error(e);
-      const errorMsg = e.response?.data?.error || "Error desconocido al finalizar el viaje.";
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: errorMsg,
-        confirmButtonText: "Entendido",
-      });
+
+      // Mostrar el error del backend 
+      if (e.response && e.response.data && e.response.data.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: e.response.data.error,
+          confirmButtonText: "Entendido",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error desconocido",
+          text: "Error desconocido al finalizar el viaje.",
+          confirmButtonText: "Salir",
+        });
+      }
     }
   };
 
   return (
     <div className="finalizar-viaje-content">
+
       <div className="finalizar-viaje">
         <h3>Finalizar viaje</h3>
+
         <div className="form-row">
           <select
             value={form.registroId}
@@ -95,16 +107,48 @@ export default function FinalizarViaje() {
           </select>
 
           <input
-            type="number" // Cambiado a type number para facilitar entrada
             placeholder="Kilometraje retorno"
             value={form.kilometrajeRetorno}
-            onChange={(e) => setForm({ ...form, kilometrajeRetorno: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, kilometrajeRetorno: e.target.value })
+            }
           />
 
           <input
             type="datetime-local"
             value={form.fechaRetorno}
-            onChange={(e) => setForm({ ...form, fechaRetorno: e.target.value })}
+            onInput={(e) => {
+              const inputElement = e.target;
+              let value = inputElement.value;
+
+              const parts = value.split("-");
+              let year = parts[0];
+
+              if (year && year.length > 4) {
+                parts[0] = year.substring(0, 4);
+                value = parts.join("-");
+                setForm({ ...form, fechaRetorno: value });
+
+                requestAnimationFrame(() => {
+                  inputElement.selectionStart = 4;
+                  inputElement.selectionEnd = 4;
+                });
+              } else {
+                setForm({ ...form, fechaRetorno: value });
+              }
+            }}
+          />
+        </div>
+
+        <div className="input-group">
+          <label className="input-label"></label>
+          <input
+            type="text"
+            name="observaciones"
+            value={form.observaciones}
+            onChange={handleChange}
+            className="custom-input"
+            placeholder="Observaciones"
           />
         </div>
 
