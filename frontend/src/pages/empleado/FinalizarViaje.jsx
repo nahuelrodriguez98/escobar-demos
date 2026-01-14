@@ -14,17 +14,15 @@ export default function FinalizarViaje() {
     observaciones: "",
   });
 
-  const load = async () => {
-    try {
-      const r = await axios.get(
-        "http://localhost:4000/registros/abiertos/${empleado.id}"
-      );
-
-      setViajes(Array.isArray(r.data) ? r.data : [r.data]);
-    } catch (err) {
-      console.error("Error cargando viajes abiertos", err);
-    }
-  };
+ const load = async () => {
+     try {
+       const r = await axios.get(`${API_URL}/registros/abiertos/${empleado.id}`);
+       setViajes(Array.isArray(r.data) ? r.data : [r.data]);
+     } catch (err) {
+       console.error("Error cargando viajes abiertos", err);
+     }
+   };
+ 
 
   useEffect(() => {
     load();
@@ -46,7 +44,7 @@ export default function FinalizarViaje() {
 
     try {
       await axios.put(
-        "http://localhost:4000/registros/finalizar/${form.registroId}",
+         `${API_URL}/registros/finalizar/${form.registroId}`,
         form
       );
 

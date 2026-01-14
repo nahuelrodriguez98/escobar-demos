@@ -20,7 +20,7 @@ const getFechaHoraActual = () => {
 
 const cargarEmpleado = async () => {
   try {
-    const r = await axios.get("http://localhost:4000/auth/userinfo", {
+    const r = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
       withCredentials: true,
     });
     if (r.data?.id) return r.data;
@@ -130,7 +130,7 @@ export default function RegistrarUso() {
   const verificarViajeAbierto = async (empleadoId) => {
     try {
       const r = await axios.get(
-        `http://localhost:4000/registros/abiertos/${empleadoId}`
+        `${import.meta.env.VITE_API_URL}/registros/abiertos/${empleadoId}`
       );
       return Array.isArray(r.data) ? r.data : [];
     } catch (err) {
@@ -150,10 +150,10 @@ export default function RegistrarUso() {
 
       let r;
       if (emp.rol === "empleado" || emp.rol === "admin") {
-        r = await axios.get("http://localhost:4000/vehiculos/todos");
+        r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos/todos`);
       } else {
         r = await axios.get(
-          `http://localhost:4000/vehiculos/por-concesionaria/${emp.concesionaria_id}`
+          `${import.meta.env.VITE_API_URL}/vehiculos/por-concesionaria/${emp.concesionaria_id}`
         );
       }
 
@@ -225,7 +225,7 @@ export default function RegistrarUso() {
     };
 
     try {
-      await axios.post("http://localhost:4000/registros", datos);
+      await axios.post(`${import.meta.env.VITE_API_URL}/registros`, datos);
 
       Swal.fire("Éxito", "Registro creado correctamente", "success");
 
