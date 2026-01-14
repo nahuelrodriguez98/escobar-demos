@@ -4,9 +4,21 @@ import Swal from "sweetalert2";
 import "../styles/finalizarviaje.css";
 
 export default function FinalizarViaje() {
-  const empleado = JSON.parse(localStorage.getItem("empleado"));
+  const [empleado] = useState(() => {
+    try {
+      const item = localStorage.getItem("empleado");
+      return item ? JSON.parse(item) : null;
+    } catch (error) {
+      return null;
+    }
+  });
+
   const [viajes, setViajes] = useState([]);
   const API_URL = import.meta.env.VITE_API_URL;
+  
+  // Estado para controlar el checkbox
+  const [sinObservaciones, setSinObservaciones] = useState(false);
+
   const [form, setForm] = useState({
     registroId: "",
     kilometrajeRetorno: "",
@@ -14,87 +26,110 @@ export default function FinalizarViaje() {
     observaciones: "",
   });
 
- const load = async () => {
-     try {
-       const r = await axios.get(`${API_URL}/registros/abiertos/${empleado.id}`);
-       setViajes(Array.isArray(r.data) ? r.data : [r.data]);
-     } catch (err) {
-       console.error("Error cargando viajes abiertos", err);
-     }
-   };
- 
+  const load = async () => {
+    if (!empleado?.id) return;
+    try {
+      const r = await axios.get(`${API_URL}/registros/abiertos/${empleado.id}`);
+      setViajes(Array.isArray(r.data) ? r.data : [r.data]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     load();
+    // eslint-disable-next-line
   }, []);
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-  const finalizar = async () => {
-    if (!form.registroId) {
 
-      Swal.fire({
-        icon: "warning",
-        title: "Atencion!",
-        text: "Debe seleccionar un viaje antes de continuar.",
-        confirmButtonText: "Aceptar",
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Manejador exclusivo para el checkbox
+  const handleCheckboxChange = (e) => {
+    const isChecked = e.target.checked;
+    setSinObservaciones(isChecked);
+    
+    setForm((prev) => ({
+      ...prev,
+      observaciones: isChecked ? "Sin observaciones" : "" 
+    }));
+  };
+
+  const handleDateChange = (e) => {
+    // ... (Misma lógica de fecha anterior)
+    const inputElement = e.target;
+    let value = inputElement.value;
+    const parts = value.split("-");
+    const year = parts[0];
+
+    if (year && year.length > 4) {
+      parts[0] = year.substring(0, 4);
+      value = parts.join("-");
+      setForm((prev) => ({ ...prev, fechaRetorno: value }));
+      requestAnimationFrame(() => {
+        inputElement.selectionStart = 4;
+        inputElement.selectionEnd = 4;
       });
-      return;
+    } else {
+      setForm((prev) => ({ ...prev, fechaRetorno: value }));
+    }
+  };
+
+  const finalizar = async () => {
+    // 1. Validar ID
+    if (!form.registroId) {
+      return Swal.fire("Atención", "Seleccione un viaje.", "warning");
+    }
+
+    // 2. Validar Campos numéricos y fechas
+    if (!form.kilometrajeRetorno || !form.fechaRetorno) {
+      return Swal.fire("Atención", "Complete el kilometraje y fecha.", "warning");
+    }
+
+    // 3. NUEVA VALIDACIÓN: Observaciones obligatorias
+    if (!form.observaciones || form.observaciones.trim() === "") {
+      return Swal.fire({
+        icon: "warning",
+        title: "Campo requerido",
+        text: "Debe escribir una observación o marcar la casilla 'Sin observaciones'.",
+      });
     }
 
     try {
-      await axios.put(
-         `${API_URL}/registros/finalizar/${form.registroId}`,
-        form
-      );
+      await axios.put(`${API_URL}/registros/finalizar/${form.registroId}`, form);
 
-      Swal.fire({
-        icon: "success",
-        title: "¡Viaje finalizado!",
-        text: "El viaje se registró correctamente.",
-        confirmButtonText: "Perfecto",
-      });
+      Swal.fire("¡Listo!", "Viaje finalizado correctamente.", "success");
 
       setForm({
         registroId: "",
         kilometrajeRetorno: "",
         fechaRetorno: "",
-        observaciones: ""
+        observaciones: "",
       });
+      setSinObservaciones(false); // Resetear checkbox
 
       load();
     } catch (e) {
       console.error(e);
-
-      // Mostrar el error del backend 
-      if (e.response && e.response.data && e.response.data.error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: e.response.data.error,
-          confirmButtonText: "Entendido",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error desconocido",
-          text: "Error desconocido al finalizar el viaje.",
-          confirmButtonText: "Salir",
-        });
-      }
+      Swal.fire("Error", e.response?.data?.error || "Error desconocido", "error");
     }
   };
 
+  if (!empleado) return <div>No hay empleado identificado.</div>;
+
   return (
     <div className="finalizar-viaje-content">
-
       <div className="finalizar-viaje">
         <h3>Finalizar viaje</h3>
 
         <div className="form-row">
           <select
+            name="registroId"
             value={form.registroId}
-            onChange={(e) => setForm({ ...form, registroId: e.target.value })}
+            onChange={handleChange}
+            className="custom-select"
           >
             <option value="">Seleccione un viaje</option>
             {viajes.map((v) => (
@@ -105,50 +140,44 @@ export default function FinalizarViaje() {
           </select>
 
           <input
-            placeholder="Kilometraje retorno"
+            type="number"
+            name="kilometrajeRetorno"
+            placeholder="Km retorno"
             value={form.kilometrajeRetorno}
-            onChange={(e) =>
-              setForm({ ...form, kilometrajeRetorno: e.target.value })
-            }
+            onChange={handleChange}
           />
 
           <input
             type="datetime-local"
+            name="fechaRetorno"
             value={form.fechaRetorno}
-            onInput={(e) => {
-              const inputElement = e.target;
-              let value = inputElement.value;
-
-              const parts = value.split("-");
-              let year = parts[0];
-
-              if (year && year.length > 4) {
-                parts[0] = year.substring(0, 4);
-                value = parts.join("-");
-                setForm({ ...form, fechaRetorno: value });
-
-                requestAnimationFrame(() => {
-                  inputElement.selectionStart = 4;
-                  inputElement.selectionEnd = 4;
-                });
-              } else {
-                setForm({ ...form, fechaRetorno: value });
-              }
-            }}
+            onInput={handleDateChange}
           />
         </div>
 
+        {/* --- SECCIÓN OBSERVACIONES MODIFICADA --- */}
         <div className="input-group">
-          <label className="input-label"></label>
           <input
             type="text"
             name="observaciones"
             value={form.observaciones}
             onChange={handleChange}
             className="custom-input"
-            placeholder="Observaciones"
+            placeholder="Observaciones (Obligatorio)"
+            disabled={sinObservaciones} // Se deshabilita si el check está activo
           />
+          
+          <div className="checkbox-container">
+            <input 
+              type="checkbox" 
+              id="chkSinObs" 
+              checked={sinObservaciones}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="chkSinObs">Sin observaciones</label>
+          </div>
         </div>
+        {/* ---------------------------------------- */}
 
         <button className="boton-finalizar" onClick={finalizar}>
           Finalizar viaje
