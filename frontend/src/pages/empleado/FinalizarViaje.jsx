@@ -155,7 +155,6 @@ export default function FinalizarViaje() {
           />
         </div>
 
-        {/* --- SECCIÓN OBSERVACIONES MODIFICADA --- */}
         <div className="input-group">
           <input
             type="text"
@@ -176,9 +175,9 @@ export default function FinalizarViaje() {
             />
             <label htmlFor="chkSinObs">Sin observaciones</label>
           </div>
-        </div>
-        {/* ---------------------------------------- */}
 
+        </div>
+        
         <button className="boton-finalizar" onClick={finalizar}>
           Finalizar viaje
         </button>
