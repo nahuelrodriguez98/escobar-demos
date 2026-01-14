@@ -162,7 +162,7 @@ export default function FinalizarViaje() {
             value={form.observaciones}
             onChange={handleChange}
             className="custom-input"
-            placeholder="Observaciones (Obligatorio)"
+            placeholder="Observaciones"
             disabled={sinObservaciones} // Se deshabilita si el check está activo
           />
           
@@ -177,7 +177,7 @@ export default function FinalizarViaje() {
           </div>
 
         </div>
-        
+
         <button className="boton-finalizar" onClick={finalizar}>
           Finalizar viaje
         </button>
