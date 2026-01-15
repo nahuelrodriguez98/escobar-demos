@@ -38,10 +38,10 @@ function initMicrosoftStrategy() {
           clientID: AZURE_CLIENT_ID,
           responseType: "code",
           responseMode: "query",
-          redirectUrl: redirectUrl, // Usamos la variable validada
+          redirectUrl: redirectUrl, 
           clientSecret: AZURE_CLIENT_SECRET,
           validateIssuer: true,
-          allowHttpForRedirectUrl: false, // En Vercel esto debe ser false (es https)
+          allowHttpForRedirectUrl: false, 
           passReqToCallback: false,
           scope: ["openid", "profile", "email"]
         },
