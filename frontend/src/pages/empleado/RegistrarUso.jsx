@@ -17,12 +17,17 @@ const getFechaHoraActual = () => {
   const offset = now.getTimezoneOffset() * 60000;
   return new Date(now - offset).toISOString().slice(0, 16);
 };
-
+const token = localStorage.getItem("token");
 const cargarEmpleado = async () => {
   try {
-    const r = await axios.get(`${import.meta.env.VITE_API_URL}/auth/userinfo`, {
-      withCredentials: true,
-    });
+    const r = await axios.get(
+      `${import.meta.env.VITE_API_URL}/auth/userinfo`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (r.data?.id) return r.data;
   } catch (e) {
     console.warn("No se pudo cargar empleado por API, revisando localStorage...");
@@ -335,7 +340,7 @@ export default function RegistrarUso() {
             />
           </div>
         </div>
-        
+
         {/* KM + Combustible */}
         <div className="form-row">
 
