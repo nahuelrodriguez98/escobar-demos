@@ -335,7 +335,7 @@ export default function RegistrarUso() {
             />
           </div>
         </div>
-        
+
         {/* KM + Combustible */}
         <div className="form-row">
 
