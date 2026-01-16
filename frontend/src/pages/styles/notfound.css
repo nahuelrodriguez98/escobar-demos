@@ -1,0 +1,101 @@
+/* NotFound.css */
+
+/* Animación suave de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* Usar min-height para evitar cortes en pantallas pequeñas */
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); /* Fondo con degradado sutil */
+  color: #343a40;
+  text-align: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.errorCode {
+  font-size: 120px;
+  margin: 0;
+  color: #e74c3c;
+  line-height: 1;
+  font-weight: 800;
+  text-shadow: 4px 4px 0px rgba(0,0,0,0.1); /* Sombra para dar profundidad */
+  animation: fadeIn 0.8s ease-out;
+}
+
+.title {
+  font-size: 32px;
+  margin: 10px 0 20px;
+  font-weight: 600;
+  animation: fadeIn 1s ease-out;
+}
+
+.text {
+  font-size: 18px;
+  color: #6c757d;
+  margin-bottom: 40px;
+  max-width: 500px; /* Evita que el texto sea muy ancho en pantallas grandes */
+  line-height: 1.6;
+  animation: fadeIn 1.2s ease-out;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 15px;
+  animation: fadeIn 1.4s ease-out;
+}
+
+.button {
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bordes un poco más redondeados */
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+  transition: all 0.3s ease; /* Transición suave para todo */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* === EFECTO HOVER (Lo que pediste) === */
+.button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px); /* El botón "flota" hacia arriba */
+  box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3); /* La sombra crece */
+}
+
+/* Efecto Click */
+.button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 5px rgba(0, 123, 255, 0.3);
+}
+
+/* === RESPONSIVIDAD (Celulares) === */
+@media (max-width: 600px) {
+  .errorCode {
+    font-size: 80px; /* Texto más pequeño en celular */
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .text {
+    font-size: 16px;
+    padding: 0 10px;
+  }
+
+  .button {
+    width: 100%; /* Botón ancho completo en celular para facilitar el toque */
+    padding: 16px 32px;
+  }
+}
