@@ -27,16 +27,14 @@ export default function Registros() {
   };
 
   const load = async () => {
-    try {
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`, getAuthHeader());
+    try {
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`, getAuthHeader());
       
-      console.log("Datos que llegan del servidor:", r.data); // <--- AGREGA ESTO
-      
-      setList(r.data);
-    } catch (error) {
-      console.error("Error al cargar registros:", error);
-    }
-  };
+      setList(r.data);
+    } catch (error) {
+      console.error("Error al cargar registros:", error);
+    }
+  };
 
   const loadEmpl = async () => {
     try {
@@ -229,7 +227,6 @@ export default function Registros() {
               {filteredRegistros.map((r) => (
                 <tr key={r.id}>
                   <td data-label="Fecha salida">
-                    {/* Intenta leer fechaSalida O fecha_salida */}
                     {(r.fechaSalida || r.fecha_salida)
                       ? new Date(r.fechaSalida || r.fecha_salida).toLocaleString()
                       : "—"}
@@ -239,7 +236,6 @@ export default function Registros() {
                   <td data-label="Destino">{r.destino || "N/A"}</td>
                   <td data-label="Kilometraje">
                     <span className="km-badge">
-                      {/* Intenta leer kilometrajeSalida O kilometraje_salida */}
                       {r.kilometrajeSalida || r.kilometraje_salida} km
                     </span>
                   </td>
