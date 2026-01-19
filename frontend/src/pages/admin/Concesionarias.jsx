@@ -63,7 +63,7 @@ export default function Concesionarias() {
       try {
         await axios.delete(`${import.meta.env.VITE_API_URL}/concesionarias/${id}`);
         Swal.fire(
-          '¡Eliminada!',
+          'Eliminada',
           'La concesionaria ha sido borrada con éxito.',
           'success'
         );

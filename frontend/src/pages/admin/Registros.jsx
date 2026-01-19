@@ -27,14 +27,16 @@ export default function Registros() {
   };
 
   const load = async () => {
-    try {
-      // Usamos el header para evitar el error 401
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`, getAuthHeader());
-      setList(r.data);
-    } catch (error) {
-      console.error("Error al cargar registros:", error);
-    }
-  };
+    try {
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/registros`, getAuthHeader());
+      
+      console.log("Datos que llegan del servidor:", r.data); // <--- AGREGA ESTO
+      
+      setList(r.data);
+    } catch (error) {
+      console.error("Error al cargar registros:", error);
+    }
+  };
 
   const loadEmpl = async () => {
     try {
@@ -227,15 +229,19 @@ export default function Registros() {
               {filteredRegistros.map((r) => (
                 <tr key={r.id}>
                   <td data-label="Fecha salida">
-                    {/* CORRECCIÓN: Usar camelCase según el log de tu backend */}
-                    {r.fechaSalida ? new Date(r.fechaSalida).toLocaleString() : "—"}
+                    {/* Intenta leer fechaSalida O fecha_salida */}
+                    {(r.fechaSalida || r.fecha_salida)
+                      ? new Date(r.fechaSalida || r.fecha_salida).toLocaleString()
+                      : "—"}
                   </td>
                   <td data-label="Empleado"><strong>{r.empleado}</strong></td>
                   <td data-label="Vehículo">{r.patente} {r.modelo ? `- ${r.modelo}` : ''}</td>
                   <td data-label="Destino">{r.destino || "N/A"}</td>
                   <td data-label="Kilometraje">
-                    {/* CORRECCIÓN: Usar camelCase */}
-                    <span className="km-badge">{r.kilometrajeSalida} km</span>
+                    <span className="km-badge">
+                      {/* Intenta leer kilometrajeSalida O kilometraje_salida */}
+                      {r.kilometrajeSalida || r.kilometraje_salida} km
+                    </span>
                   </td>
                   <td data-label="Acciones" className="text-center">
                     <button className="btn btn-danger" onClick={() => borrar(r.id)}>
