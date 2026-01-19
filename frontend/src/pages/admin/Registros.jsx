@@ -20,7 +20,6 @@ export default function Registros() {
     observaciones: "",
   });
 
-  // Helper para obtener el config con el Token
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
     return { headers: { Authorization: `Bearer ${token}` } };
@@ -117,7 +116,7 @@ export default function Registros() {
 
   return (
     <AdminLayout>
-      <h2 className="title-vehiculos">Registros de uso (Admin)</h2>
+      <h2 className="title-vehiculos">Todos los registros de uso </h2>
 
       {/* ========== FORMULARIO ========== */}
       <div className="card">
