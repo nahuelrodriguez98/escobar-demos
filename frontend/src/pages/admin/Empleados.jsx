@@ -143,7 +143,8 @@ export default function Empleados() {
           </select>
         </div>
         <div className="form-row">
-          <input placeholder="Contraseña temporal" value={form.contrasenia} onChange={e => setForm({ ...form, contrasenia: e.target.value })} />
+          <input  type='password' placeholder="Contraseña temporal" value={form.contrasenia} onChange={e => 
+            setForm({ ...form, contrasenia: e.target.value })} />
           <button type='submit' className="btn btn-primary" onClick={crear}>Crear</button>
         </div>
       </div>
