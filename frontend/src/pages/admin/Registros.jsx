@@ -116,7 +116,7 @@ export default function Registros() {
 
   return (
     <AdminLayout>
-      <h2 className="title-vehiculos">Todos los registros de uso </h2>
+      <h2 className="title-vehiculos">Registros de Uso </h2>
 
       {/* ========== FORMULARIO ========== */}
       <div className="card">
