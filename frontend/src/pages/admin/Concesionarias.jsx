@@ -16,15 +16,41 @@ export default function Concesionarias() {
   useEffect(() => { load(); }, []);
 
   const crear = async () => {
-    await axios.post(`${import.meta.env.VITE_API_URL}/concesionarias`, form);
-    setForm({ nombre: '', direccion: '' });
-    load();
-  };
+    try{
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/concesionarias`, form);
+
+      Swal.fire({
+        icon: "success",
+        title: "Concesionaria creada",
+        text:`El concesionario ${res.data.concesionaria?.nombre || ''} fue creado con exito.`, 
+        timer: 1500,
+        showConfirmButton: false
+      });
+
+      setForm({
+        nombre:'',
+        direccion:''
+      })
+
+      await load()
+
+    } catch (err){
+      console.error("Error creando concesionaria", err);
+      const msg = err.response?.data?.mensaje || err.response?.data?.error || err.message;
+
+      Swal.fire({
+        icon: "error",
+        title:"Error al intentar crear concesionaria",
+        text: msg
+      })
+
+    }
+  }
 
   const borrar = async (id) => {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: '¡Esta acción no se puede revertir! La concesionaria será eliminada permanentemente.',
+      text: 'Esta acción no se puede revertir! La concesionaria será eliminada permanentemente.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -72,7 +98,7 @@ export default function Concesionarias() {
             value={form.direccion}
             onChange={e => setForm({ ...form, direccion: e.target.value })}
           />
-          <button className="btn btn-primary" onClick={crear}>
+          <button type='submit' className="btn btn-primary" onClick={crear}>
             Crear Concesionaria
           </button>
         </div>

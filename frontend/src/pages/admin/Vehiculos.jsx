@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/AdminLayout";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../styles/vehiculos.css"
+import "../styles/vehiculos.css";
 
 
 export default function Vehiculos() {
@@ -78,7 +78,6 @@ export default function Vehiculos() {
     }
   };
 
-
   const borrar = async (id) => {
     if (!confirm("¿Borrar vehículo?")) return;
 
@@ -108,7 +107,6 @@ export default function Vehiculos() {
       });
     }
   };
-
 
   useEffect(() => {
     load();
@@ -161,7 +159,7 @@ export default function Vehiculos() {
                 </option>
               ))}
             </select>
-            <button className="btn btn-primary" onClick={crear}>
+            <button type="submit" className="btn btn-primary" onClick={crear}>
               Crear
             </button>
           </div>
@@ -192,11 +190,7 @@ export default function Vehiculos() {
               />
             </div>
 
-            <button
-              className="btn btn-secondary"
-              onClick={() => setSearch("")}
-              disabled={!search}
-            >
+            <button className="btn btn-secondary" onClick={() => setSearch("")} disabled={!search}>
               Limpiar filtro
             </button>
 

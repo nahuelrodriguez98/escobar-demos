@@ -50,7 +50,7 @@ export default function Ingreso() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "40px" }}>
-      <h2>Procesando ingreso...</h2>
+      <h2>Ingresando...</h2>
     </div>
   );
 }
