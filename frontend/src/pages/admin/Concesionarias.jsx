@@ -112,7 +112,6 @@ export default function Concesionarias() {
             type='submit' 
             className="btn btn-primary" 
             onClick={crear}
-            style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
             Crear Concesionaria
           </button>
