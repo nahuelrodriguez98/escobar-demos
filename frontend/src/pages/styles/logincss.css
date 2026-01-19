@@ -91,7 +91,7 @@
   background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  color: #333;
+  color: #343434;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
@@ -106,12 +106,23 @@
 }
 
 .google-btn:hover {
-  background: #f7f7f7;
+  background: #f3f3f3;
 }
+
 .login-button:hover {
   background: #006fe0;
 }
 
 .login-button:active {
   transform: scale(0.97);
+}
+
+.google-btn:hover img {
+  filter: saturate(1.8) brightness(1.1);
+  transform: scale(1.1); 
+  transition: all 0.3s ease;
+}
+
+.google-btn img {
+  transition: all 0.3s ease; 
 }
