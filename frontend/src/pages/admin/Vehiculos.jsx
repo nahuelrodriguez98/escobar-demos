@@ -4,10 +4,11 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import "../styles/vehiculos.css";
 
-
 export default function Vehiculos() {
   const [list, setList] = useState([]);
   const [conces, setConces] = useState([]);
+  const [qrGenerado, setQrGenerado] = useState(null);
+
   const [form, setForm] = useState({
     patente: "",
     marca: "",
@@ -19,26 +20,14 @@ export default function Vehiculos() {
   const [search, setSearch] = useState("");
   const [filterBy, setFilterBy] = useState("patente");
 
+  /* ================= LOAD ================= */
+
   const load = async () => {
     try {
-      const storedUser = JSON.parse(localStorage.getItem('user'));
-
-      if (!storedUser) {
-        const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`);
-        setList(r.data);
-        return;
-      }
-
-      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`, {
-        params: {
-          concesionaria_id: storedUser.concesionaria_id,
-          rol: storedUser.rol
-        }
-      });
-
+      const r = await axios.get(`${import.meta.env.VITE_API_URL}/vehiculos`);
       setList(r.data);
     } catch (err) {
-      console.error('Error cargando vehiculos', err);
+      console.error("Error cargando vehículos", err);
     }
   };
 
@@ -47,14 +36,24 @@ export default function Vehiculos() {
     setConces(r.data);
   };
 
+  useEffect(() => {
+    load();
+    loadConces();
+  }, []);
+
+  /* ================= CREATE ================= */
+
   const crear = async () => {
     try {
       const payload = {
         ...form,
-        concesionaria_id: form.concesionaria_id ? Number(form.concesionaria_id) : null,
+        concesionaria_id: Number(form.concesionaria_id),
       };
 
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/vehiculos`, payload);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/vehiculos`,
+        payload
+      );
 
       Swal.fire({
         icon: "success",
@@ -64,19 +63,18 @@ export default function Vehiculos() {
         showConfirmButton: false
       });
 
-      // reset form y recargar la lista
+      setQrGenerado(res.data.qr); // 👈 QR base64
       setForm({ patente: "", marca: "", modelo: "", concesionaria_id: "", activo: true });
       await load();
+
     } catch (err) {
       console.error("Error creando vehículo", err);
       const msg = err.response?.data?.mensaje || err.response?.data?.error || err.message;
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: msg
-      });
+      Swal.fire("Error", msg, "error");
     }
   };
+
+  /* ================= DELETE ================= */
 
   const borrar = async (id) => {
     if (!confirm("¿Borrar vehículo?")) return;
@@ -94,109 +92,92 @@ export default function Vehiculos() {
       load();
     } catch (err) {
       console.error("Error eliminando vehículo", err);
-
-      const msg =
-        err.response?.data?.mensaje ||
-        err.response?.data?.error ||
-        "Error desconocido";
-
-      Swal.fire({
-        icon: "error",
-        title: "No se puede eliminar",
-        text: msg,
-      });
+      Swal.fire("Error", "No se puede eliminar", "error");
     }
   };
 
-  useEffect(() => {
-    load();
-    loadConces();
-  }, []);
+  /* ================= FILTER ================= */
 
   const filteredVehiculos = list.filter((v) => {
     const searchTerm = search.toLowerCase().trim();
+    if (!searchTerm) return true;
 
-    if (!searchTerm) {
-      return true;
-    }
+    let value = "";
+    if (filterBy === "patente") value = v.patente;
+    if (filterBy === "marca") value = v.marca;
+    if (filterBy === "modelo") value = v.modelo;
+    if (filterBy === "concesionaria") value = v.concesionaria;
 
-    let valueToFilter = '';
-
-    switch (filterBy) {
-      case 'patente':
-        valueToFilter = v.patente;
-        break;
-      case 'marca':
-        valueToFilter = v.marca;
-        break;
-      case 'modelo':
-        valueToFilter = v.modelo;
-        break;
-      case 'concesionaria':
-        valueToFilter = v.concesionaria;
-        break;
-      default:
-        return true;
-    }
-
-    return valueToFilter?.toLowerCase().includes(searchTerm);
+    return value?.toLowerCase().includes(searchTerm);
   });
 
-    return (
+  /* ================= UI ================= */
+
+  return (
     <AdminLayout>
       <div className="vehiculos-container">
         <h2 className="title-vehiculos">Vehículos</h2>
+
+        {/* CREAR */}
         <div className="card">
           <div className="form-row">
             <input placeholder="Patente" value={form.patente} onChange={(e) => setForm({ ...form, patente: e.target.value })} />
             <input placeholder="Marca" value={form.marca} onChange={(e) => setForm({ ...form, marca: e.target.value })} />
             <input placeholder="Modelo" value={form.modelo} onChange={(e) => setForm({ ...form, modelo: e.target.value })} />
+
             <select value={form.concesionaria_id} onChange={(e) => setForm({ ...form, concesionaria_id: e.target.value })}>
               <option value="">Elegir concesionaria</option>
               {conces.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.nombre}
-                </option>
+                <option key={c.id} value={c.id}>{c.nombre}</option>
               ))}
             </select>
-            <button type="submit" className="btn btn-primary" onClick={crear}>
+
+            <button className="btn btn-primary" onClick={crear}>
               Crear
             </button>
           </div>
         </div>
+
+        {/* QR */}
+        {qrGenerado && (
+          <div className="card qr-card">
+            <h3>QR generado</h3>
+            <img src={qrGenerado} alt="QR vehículo" style={{ width: 220 }} />
+
+            <a
+              href={qrGenerado}
+              download="vehiculo_qr.png"
+              className="btn btn-secondary"
+              style={{ marginTop: 10 }}
+            >
+              Descargar QR
+            </a>
+          </div>
+        )}
+
+        {/* LISTA */}
         <div className="card">
 
-          {/* FILTROS */}
           <div className="filtro-container">
+            <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+              <option value="patente">Patente</option>
+              <option value="marca">Marca</option>
+              <option value="modelo">Modelo</option>
+              <option value="concesionaria">Concesionaria</option>
+            </select>
 
-            <div className="filtro-group">
-              <select
-                value={filterBy}
-                onChange={(e) => setFilterBy(e.target.value)}
-                className="form-select"
-              >
-                <option value="patente">Buscar por Patente</option>
-                <option value="marca">Buscar por Marca</option>
-                <option value="modelo">Buscar por Modelo</option>
-                <option value="concesionaria">Buscar por Concesionaria</option>
-              </select>
+            <input
+              type="text"
+              placeholder="Buscar..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
-              <input
-                type="text"
-                placeholder={`Buscar por ${filterBy}`}
-                className="form-control"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-
-            <button className="btn btn-secondary" onClick={() => setSearch("")} disabled={!search}>
-              Limpiar filtro
+            <button onClick={() => setSearch("")} disabled={!search}>
+              Limpiar
             </button>
-
           </div>
 
-          {/* TABLA */}
           <div className="table-container">
             <table className="responsive-table">
               <thead>
@@ -206,22 +187,18 @@ export default function Vehiculos() {
                   <th>Patente</th>
                   <th>Concesionaria</th>
                   <th>Activo</th>
-                  <th className="text-center">Acciones</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredVehiculos.map((v) => (
                   <tr key={v.id}>
-                    <td data-label="Marca">{v.marca}</td>
-                    <td data-label="Modelo">{v.modelo}</td>
-                    <td data-label="Patente">{v.patente}</td>
-                    <td data-label="Concesionaria">{v.concesionaria}</td>
-                    <td data-label="Activo">
-                      <span className={`status-badge ${v.activo ? 'active' : 'inactive'}`}>
-                        {v.activo ? "Sí" : "No"}
-                      </span>
-                    </td>
-                    <td data-label="Acciones" className="text-center">
+                    <td>{v.marca}</td>
+                    <td>{v.modelo}</td>
+                    <td>{v.patente}</td>
+                    <td>{v.concesionaria}</td>
+                    <td>{v.activo ? "Sí" : "No"}</td>
+                    <td>
                       <button className="btn btn-danger" onClick={() => borrar(v.id)}>
                         Borrar
                       </button>
@@ -236,7 +213,6 @@ export default function Vehiculos() {
             )}
           </div>
         </div>
-
       </div>
     </AdminLayout>
   );
