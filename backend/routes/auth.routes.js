@@ -8,9 +8,8 @@ const { initMicrosoftStrategy } = require("../auth/microsoft");
 // Login Microsoft
 // =======================
 router.get("/microsoft", (req, res, next) => {
-  initMicrosoftStrategy(); // Ahora sí funcionará y leerá las env vars en tiempo de ejecución
+  initMicrosoftStrategy(); 
   
-  // Verificación de seguridad por si la estrategia falló al cargar
   try {
       passport.authenticate("azuread-openidconnect")(req, res, next);
   } catch (e) {
@@ -133,7 +132,6 @@ router.get("/userinfo", (req, res) => {
   try {
     const token = auth.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // Si el token es válido, devolvemos los datos del usuario decodificados
     return res.json(decoded);
   } catch (err) {
     console.error("JWT Verify Error:", err.message);
