@@ -159,22 +159,24 @@ export default function Vehiculos() {
         <div className="card">
 
           <div className="filtro-container">
-            <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
-              <option value="patente">Patente</option>
-              <option value="marca">Marca</option>
-              <option value="modelo">Modelo</option>
-              <option value="concesionaria">Concesionaria</option>
-            </select>
+            <div className="filtro-group">
+              <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+                <option value="patente">Patente</option>
+                <option value="marca">Marca</option>
+                <option value="modelo">Modelo</option>
+                <option value="concesionaria">Concesionaria</option>
+              </select>
 
-            <input
-              type="text"
-              placeholder="Buscar..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+              <input
+                type="text"
+                placeholder="Buscar..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
 
-            <button onClick={() => setSearch("")} disabled={!search}>
-              Limpiar
+            </div>
+            <button className="btn btn-secondary" onClick={() => setSearch("")} disabled={!search}>
+              Limpiar filtro
             </button>
           </div>
 
