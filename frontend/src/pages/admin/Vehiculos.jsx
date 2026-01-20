@@ -160,7 +160,7 @@ export default function Vehiculos() {
 
           <div className="filtro-container">
             <div className="filtro-group">
-              <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+              <select value={filterBy} onChange={(e) => setFilterBy(e.target.value)} className="form-select">
                 <option value="patente">Patente</option>
                 <option value="marca">Marca</option>
                 <option value="modelo">Modelo</option>
@@ -171,6 +171,7 @@ export default function Vehiculos() {
                 type="text"
                 placeholder="Buscar..."
                 value={search}
+                className="form-control"
                 onChange={(e) => setSearch(e.target.value)}
               />
 
